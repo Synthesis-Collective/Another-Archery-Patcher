@@ -1,0 +1,12 @@
+{
+  "id": "aatpatcher",
+  "name": "Another Archery Patcher",
+  "author": "radj307",
+  "version": "1.0",
+  "released": "00/00/0000",
+  "updated": "00/00/0000",
+  "description": "Applies AAT tweaks to your load order.",
+  "requires": ["unifiedPatchingFramework"],
+  "moduleLoader": "UPF",
+  "canHotLoad": true
+}
