@@ -4,23 +4,21 @@
     </head>
     <body>
 	    <h2 class="title">Another Archery Patcher (Version 1.0)</h2>
-
+        <hr>
 	    <section class="section-arrow"> <!-- ARROW-SPECIFIC TWEAKS -->
-		    <h3><input type="checkbox" ng-model="settings.aatpatcher.arrow.enabled" checked><b>Arrow Tweaks</b></h3>
+		    <h3><b>Arrow Tweaks</b> <input type="checkbox" ng-model="settings.aatpatcher.arrow.enabled" checked></h3>
 		    <div>
-                <div>
-                    <b>Speed</b> <br>
-                    <input type="number" step="0.000001" min="0.000000" input="" ng-model="settings.aatpatcher.arrow.speed" required value="5000.000000">
-                </div>
-                <div>
-                    <b>Gravity</b> <br>
-                    <input type="number" step="0.000001" min="0.000000" input="" ng-model="settings.aatpatcher.arrow.gravity" required value="0.350000">
-                </div>
-                <div>
-                    <b>Impact Force</b>
-                    <br>
-                    <input type="number" step="0.000001" min="0.000000" input="" ng-model="settings.aatpatcher.arrow.impactforce" required value="0.440000">
-                </div>
+                <b>Speed</b>
+                <br>
+                <input type="number" step="0.000001" min="0.000000" input="" ng-model="settings.aatpatcher.arrow.speed" required value="5000.000000">
+                <br>
+                <b>Gravity</b>
+                <br>
+                <input type="number" step="0.000001" min="0.000000" input="" ng-model="settings.aatpatcher.arrow.gravity" required value="0.350000">
+                <br>
+                <b>Impact Force</b>
+                <br>
+                <input type="number" step="0.000001" min="0.000000" input="" ng-model="settings.aatpatcher.arrow.impactforce" required value="0.440000">
                 <br>
                 <form>
                     <b>
@@ -35,8 +33,9 @@
                 </form>
             </div>
 	    </section>
+        <hr>
         <section class="section-bolt"> <!-- BOLT-SPECIFIC TWEAKS -->
-            <h3><input type="checkbox" ng-model="settings.aatpatcher.bolt.enabled" checked><b>Bolt Tweaks</b></h3>
+            <h3><b>Bolt Tweaks</b> <input type="checkbox" ng-model="settings.aatpatcher.bolt.enabled" checked> </h3>
             <div>
                 <b>Speed</b>
                 <br>
@@ -63,11 +62,12 @@
                 </form>
             </div>
         </section>
+        <hr>
         <section class="section-common"> <!-- COMMON SETTINGS -->
             <h3><b>Other Tweaks</b></h3>
             <div>
-                <input type="checkbox" ng-model="settings.aatpatcher.disable_autoaim" checked> <b>Disable Auto-Aim</b> <br>
                 <input type="checkbox" ng-model="settings.aatpatcher.disable_supersonic" checked> <b>Remove "Supersonic" Flag</b> <br>
+                <input type="checkbox" ng-model="settings.aatpatcher.disable_autoaim" checked> <b>Disable Auto-Aim</b> <br>
             </div>
         </section>
     </body>

@@ -1,3 +1,13 @@
+function patch_projectile(record, settingobj) {
+	if (settingobj.enabled) {
+		xelib.SetFloatValue(record, 'DATA\\Speed', settingobj.speed);
+		xelib.SetFloatValue(record, 'DATA\\Gravity', settingobj.gravity);
+		xelib.SetFloatValue(record, 'DATA\\Impact Force', settingobj.impactforce);
+		xelib.SetValue(record, 'VNAM', settingobj.noiselevel)
+    }
+}
+
+// Another Archery Tweak zEdit Patcher by radj307
 registerPatcher({
 	info: info,								// ? Object Type ?
 	gameModes: [xelib.gmTES5, xelib.gmSSE],	// Determines which games this module applies to
@@ -37,22 +47,6 @@ registerPatcher({
 			helpers.logMessage('    Another Archery Tweak');
 			helpers.logMessage('             Version 1.0');
 			helpers.logMessage(' ------------------------------------------ ');
-			helpers.logMessage('Configuration:');
-			helpers.logMessage(settings.aatpatcher);
-			if (settings.arrow.enabled) {
-				helpers.logMessage('[ARROWS]');
-				helpers.logMessage('arrow.speed       ' + settings.arrow.speed);
-				helpers.logMessage('arrow.gravity     ' + settings.arrow.gravity);
-				helpers.logMessage('arrow.impactforce ' + settings.arrow.impactforce);
-				helpers.logMessage('arrow.noiselevel  ' + settings.arrow.noiselevel);
-			}
-			if (settings.bolt.enabled) {
-				helpers.logMessage('[BOLTS]');
-				helpers.logMessage('bolt.speed       ' + settings.bolt.speed);
-				helpers.logMessage('bolt.gravity     ' + settings.bolt.gravity);
-				helpers.logMessage('bolt.impactforce ' + settings.bolt.impactforce);
-				helpers.logMessage('bolt.noiselevel  ' + settings.bolt.noiselevel);
-            }
 			helpers.logMessage('BEGIN');
 		},
 
@@ -63,7 +57,7 @@ registerPatcher({
 					filter: rec => true
 				},
 				patch: rec => {
-					if (settings.disableautoaim) {
+					if (settings.disable_autoaim) {
 						let editorID = xelib.GetValue(rec, 'EDID');
 						if (editorID.includes('fAutoAimMaxDegrees')) {
 							xelib.SetValue(rec, 'DATA\\Float', '0.000000');
@@ -94,26 +88,26 @@ registerPatcher({
 					let editorID = xelib.GetValue(rec, 'EDID');
 					let proj_t = xelib.GetValue(rec, 'DATA\\Type');
 					if (proj_t.includes('Arrow')) { // Projectile is an arrow/bolt type.
-						if (editorID.includes('Arrow') && settings.arrow.enabled) { // Projectile is an arrow
-							helpers.logMessage('[ARROW]: ' + editorID); // debug
-							xelib.SetFloatValue(rec, 'DATA\\Speed', settings.arrow.speed);				// Apply arrow speed
-							xelib.SetFloatValue(rec, 'DATA\\Gravity', settings.arrow.gravity);			// Apply arrow gravity
-							xelib.SetFloatValue(rec, 'DATA\\Impact Force', settings.arrow.impactforce);	// Apply arrow impact force
-							xelib.SetValue(rec, 'VNAM', settings.arrow.noiselevel);						// Apply arrow noise level
+						// Disable supersonic flag if settings allow
+						if (settings.disable_supersonic) {
 							let supersonic = xelib.GetFlag(rec, 'DATA\\Flags', 'Supersonic');			// Get supersonic flag state
 							if (supersonic) { xelib.SetFlag(rec, 'DATA\\Flags', 'Supersonic', false); }	// If true then remove supersonic flag
 						}
-						else if (editorID.includes('Bolt') && settings.bolt.enabled) { // Projectile is a bolt
+						// Modify stats for arrows / bolts
+						if (settings.arrow.enabled && (editorID.includes('Arrow') || editorID == "DLC1AurielsBloodDippedProjectile")) { // Projectile is an arrow
+							helpers.logMessage('[ARROW]: ' + editorID); // debug
+							patch_projectile(rec, settings.arrow);
+							if (settings.arrow.gravity > 0 && editorID == "DLC1AurielsBloodDippedProjectile" || editorID == "DCL1ArrowElvenBloodProjectile") {
+								helpers.logMessage('Removing gravity from ' + editorID)
+								xelib.SetFloatValue(rec, 'DATA\\Gravity', 0.000000);
+							}
+						}
+						else if (settings.bolt.enabled && editorID.includes('Bolt')) { // Projectile is a bolt
 							helpers.logMessage('[BOLT]: ' + editorID); // debug
-							xelib.SetFloatValue(rec, 'DATA\\Speed', settings.bolt.speed);				// Apply bolt speed
-							xelib.SetFloatValue(rec, 'DATA\\Gravity', settings.bolt.gravity);			// Apply bolt gravity
-							xelib.SetFloatValue(rec, 'DATA\\Impact Force', settings.bolt.impactforce);	// Apply bolt impact force
-							xelib.SetValue(rec, 'VNAM', settings.bolt.noiselevel);						// Apply bolt noise level
-							let supersonic = xelib.GetFlag(rec, 'DATA\\Flags', 'Supersonic');			// Get supersonic flag state
-							if (supersonic) { xelib.SetFlag(rec, 'DATA\\Flags', 'Supersonic', false); }	// If true then remove supersonic flag
+							patch_projectile(rec, settings.bolt);
 						}
 						else {
-							helpers.logMessage('Unrecognized Projectile Type (May require adding to overrides list): ' + editorID);
+							helpers.logMessage('Skipped projectile: ' + editorID);
 						} // debug
 					}
 				}
