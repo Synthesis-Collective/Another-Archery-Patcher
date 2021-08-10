@@ -19,6 +19,7 @@ registerPatcher({
 			patchFileName: 'Another_Archery_Tweak.esp',
 			disable_autoaim: true,
 			disable_supersonic: true,
+			disable_dodge: false,
 			arrow: {
 				enabled: true,
 				speed: 5000.000000,
@@ -57,8 +58,13 @@ registerPatcher({
 					filter: rec => true
 				},
 				patch: rec => {
+					let editorID = xelib.GetValue(rec, 'EDID');
+					if (settings.disable_dodge) { // TODO: Implement a checkbox for this in settings.html
+						if (editorID.includes('fCombatDodgeChanceMax')) {
+							xelib.SetValue(rec, 'DATA\\Float', '0.000000');
+						}
+					}
 					if (settings.disable_autoaim) {
-						let editorID = xelib.GetValue(rec, 'EDID');
 						if (editorID.includes('fAutoAimMaxDegrees')) {
 							xelib.SetValue(rec, 'DATA\\Float', '0.000000');
 							helpers.logMessage('Set fAutoAimMaxDegrees to 0.');
@@ -86,8 +92,7 @@ registerPatcher({
 				},
 				patch: rec => {
 					let editorID = xelib.GetValue(rec, 'EDID');
-					let proj_t = xelib.GetValue(rec, 'DATA\\Type');
-					if (proj_t.includes('Arrow')) { // Projectile is an arrow/bolt type.
+					if (xelib.GetValue(rec, 'DATA\\Type').includes('Arrow')) { // Projectile is an arrow/bolt type.
 						// Disable supersonic flag if settings allow
 						if (settings.disable_supersonic) {
 							let supersonic = xelib.GetFlag(rec, 'DATA\\Flags', 'Supersonic');			// Get supersonic flag state
