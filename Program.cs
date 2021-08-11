@@ -17,40 +17,46 @@ namespace AATPatcher
             loud = 2,
             very_loud = 3,
         }
-        public class Settings
+
+        public class GameSettings
         {
-            public bool disable_supersonic = true;
             public bool disable_autoaim = true;
             public bool disable_npcDodge = false;
-
-            public bool arrow_tweaks_enabled = true;
-            public float arrow_speed = 5000.0f;
-            public float arrow_gravity = 0.35f;
-            public float arrow_impactForce = 0.44f;
-            public SoundLevel arrow_soundLevel = SoundLevel.silent;
-
-            public bool bolt_tweaks_enabled = true;
-            public float bolt_speed = 5800.0f;
-            public float bolt_gravity = 0.35f;
-            public float bolt_impactForce = 0.44f;
-            public SoundLevel bolt_soundLevel = SoundLevel.normal;
-
-            public bool spear_tweaks_enabled = true;
-            public float spear_speed = 5000.0f;
-            public float spear_gravity = 0.35f;
-            public float spear_impactForce = 0.44f;
-            public SoundLevel spear_soundLevel = SoundLevel.silent;
-
-            public bool special_tweaks_enabled = true;
-            public float special_speed = 5000.0f;
-            public float special_gravity = 0.35f;
-            public float special_impactForce = 0.44f;
-            public SoundLevel special_soundLevel = SoundLevel.silent;
-
+            public GameSettings(bool disableAutoAim, bool disableNPCDodge)
+            {
+                disable_autoaim = disableAutoAim;
+                disable_npcDodge = disableNPCDodge;
+            }
         }
-        static Lazy<Settings> settings = null!;
+        public class ProjectileTweaks
+        {
+            public bool enabled;
+            public float speed;
+            public float gravity;
+            public float impactForce;
+            public SoundLevel soundLevel;
+            public bool disable_supersonic;
+            public ProjectileTweaks(bool enable, float proj_speed, float proj_gravity, float proj_impactForce, SoundLevel proj_soundLevel, bool flag_disable_supersonic)
+            {
+                enabled = enable;
+                speed = proj_speed;
+                gravity = proj_gravity;
+                impactForce = proj_impactForce;
+                soundLevel = proj_soundLevel;
+                disable_supersonic = flag_disable_supersonic;
+            }
+        }
+        public class TopLevelSettings
+        {
+            public ProjectileTweaks ArrowTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent, true);
+            public ProjectileTweaks BoltTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent, true);
+            public ProjectileTweaks ThrowableTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent, true);
+            public ProjectileTweaks SpecialTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent, true);
+            public GameSettings GameSettings = new(true, false);
+        }
+        static Lazy<TopLevelSettings> settings = null!;
 
-        public static void handle_special_projectile()
+        public static void handle_special_projectile(string id, Mutagen.Bethesda.Skyrim.IProjectileGetter proj)
         {
 
         }
@@ -70,48 +76,46 @@ namespace AATPatcher
 
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
+            if ( settings == null)
+                throw new Exception("Settings object was null!");
             foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) {
                 var id = proj.EditorID;
                 if ( id != null )
                 {
-                    if ( id.Contains("Trap", StringComparison.OrdinalIgnoreCase))
-                    {
-
-                    }
-                    if ( (id.Contains("SSM", StringComparison.OrdinalIgnoreCase) || id.Contains("Spear", StringComparison.OrdinalIgnoreCase)) && settings.Value.spear_tweaks_enabled )
+                    if ( (id.Contains("SSM", StringComparison.OrdinalIgnoreCase) || id.Contains("Spear", StringComparison.OrdinalIgnoreCase)) && settings.Value.ThrowableTweaks.enabled )
                     {
                         var spear = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
-                        spear.Speed = settings.Value.spear_speed;
-                        spear.Gravity = settings.Value.spear_gravity;
-                        spear.ImpactForce = settings.Value.spear_impactForce;
-                        spear.SoundLevel = (uint)settings.Value.spear_soundLevel;
+                        spear.Speed = settings.Value.ThrowableTweaks.speed;
+                        spear.Gravity = settings.Value.ThrowableTweaks.gravity;
+                        spear.ImpactForce = settings.Value.ThrowableTweaks.impactForce;
+                        spear.SoundLevel = (uint)settings.Value.ThrowableTweaks.soundLevel;
                         Console.WriteLine("Finished processing spear: " + id);
                     }
-                    else if ( id.Contains("Arrow", StringComparison.OrdinalIgnoreCase) && settings.Value.arrow_tweaks_enabled && !id.Contains("Bloodcursed", StringComparison.OrdinalIgnoreCase) ) // if projectile is an arrow
+                    else if ( id.Contains("Arrow", StringComparison.OrdinalIgnoreCase) && settings.Value.ArrowTweaks.enabled && !id.Contains("Bloodcursed", StringComparison.OrdinalIgnoreCase) ) // if projectile is an arrow
                     {
                         var arrow = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
-                        arrow.Speed = settings.Value.arrow_speed;
-                        arrow.Gravity = settings.Value.arrow_gravity;
-                        arrow.ImpactForce = settings.Value.arrow_impactForce;
-                        arrow.SoundLevel = (uint)settings.Value.arrow_soundLevel;
+                        arrow.Speed = settings.Value.ArrowTweaks.speed;
+                        arrow.Gravity = settings.Value.ArrowTweaks.gravity;
+                        arrow.ImpactForce = settings.Value.ArrowTweaks.impactForce;
+                        arrow.SoundLevel = (uint)settings.Value.ArrowTweaks.soundLevel;
                         Console.WriteLine("Finished processing arrow: " + id);
                     }
-                    else if ( id.Contains("Bolt", StringComparison.OrdinalIgnoreCase) && settings.Value.bolt_tweaks_enabled ) // if projectile is a bolt
+                    else if ( id.Contains("Bolt", StringComparison.OrdinalIgnoreCase) && settings.Value.BoltTweaks.enabled && !id.Contains("Trap", StringComparison.OrdinalIgnoreCase) ) // if projectile is a bolt
                     {
                         var bolt = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
-                        bolt.Speed = settings.Value.bolt_speed;
-                        bolt.Gravity = settings.Value.bolt_gravity;
-                        bolt.ImpactForce = settings.Value.bolt_impactForce;
-                        bolt.SoundLevel = (uint)settings.Value.bolt_soundLevel;
+                        bolt.Speed = settings.Value.BoltTweaks.speed;
+                        bolt.Gravity = settings.Value.BoltTweaks.gravity;
+                        bolt.ImpactForce = settings.Value.BoltTweaks.impactForce;
+                        bolt.SoundLevel = (uint)settings.Value.BoltTweaks.soundLevel;
                         Console.WriteLine("Finished processing bolt: " + id);
                     }
-                    else if ( proj.Type == Projectile.TypeEnum.Arrow && settings.Value.special_tweaks_enabled ) // if projectile is at least of type arrow
+                    else if ( proj.Type == Projectile.TypeEnum.Arrow && settings.Value.SpecialTweaks.enabled ) // if projectile is at least of type arrow
                     {
                         var special = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
-                        special.Speed = settings.Value.special_speed;
-                        special.Gravity = settings.Value.special_gravity;
-                        special.ImpactForce = settings.Value.special_impactForce;
-                        special.SoundLevel = (uint)settings.Value.special_soundLevel;
+                        special.Speed = settings.Value.SpecialTweaks.speed;
+                        special.Gravity = settings.Value.SpecialTweaks.gravity;
+                        special.ImpactForce = settings.Value.SpecialTweaks.impactForce;
+                        special.SoundLevel = (uint)settings.Value.SpecialTweaks.soundLevel;
                         Console.WriteLine("Finished processing special projectile: " + id);
                     }
                     else
