@@ -4,6 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE" />
+    <None Remove="README.md" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Mutagen.Bethesda" Version="0.30.4" />

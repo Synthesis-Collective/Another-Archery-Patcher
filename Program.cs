@@ -20,8 +20,27 @@ namespace AATPatcher
 
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
-
-            //Your code here!
+            foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) {
+                var id = proj.EditorID;
+                if ( id != null )
+                {
+                    if ( id.Contains("Arrow", StringComparison.OrdinalIgnoreCase) ) // if projectile is an arrow
+                    {
+                        var arrow = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
+                        // handle arrow
+                    }
+                    else if ( id.Contains("Bolt", StringComparison.OrdinalIgnoreCase) ) // if projectile is a bolt
+                    {
+                        var bolt = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
+                        // handle bolt
+                    }
+                    else if ( proj.Type == Projectile.TypeEnum.Arrow ) // if projectile is at least of type arrow
+                    {
+                        var special = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
+                        // print log message
+                    }
+                }
+            }
         }
     }
 }
