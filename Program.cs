@@ -108,31 +108,36 @@ namespace AATPatcher
         {
             if ( settings == null)
                 throw new Exception("Settings object was null!");
-            foreach (var GMST in state.LoadOrder.PriorityOrder.GameSetting().WinningOverrides())
+            if (settings.Value.GameSettings.disable_autoaim) // disable auto-aim
             {
-                var id = GMST.EditorID;
-                if ( id != null)
+                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease)
                 {
-                    if ( (
-                        id.Contains("fAutoAimMaxDegrees", StringComparison.OrdinalIgnoreCase) ||
-                        id.Contains("fAutoAimMaxDistance", StringComparison.OrdinalIgnoreCase) ||
-                        id.Contains("fAutoAimScreenPercentage", StringComparison.OrdinalIgnoreCase) ||
-                        id.Contains("fAutoAimMaxDegrees3rdPerson", StringComparison.OrdinalIgnoreCase)
-                        ) && settings.Value.GameSettings.disable_autoaim )
-                    {
-                        var gmst = state.PatchMod.GameSettings.GetOrAddAsOverride(GMST);
-
-                    }
-                    else if ( id.Contains("fCombatDodgeChanceMax", StringComparison.OrdinalIgnoreCase) && settings.Value.GameSettings.disable_npcDodge)
-                    {
-
-
-                    }
-                }
-                else
+                    EditorID = "fAutoAimMaxDegrees",
+                    Data = 0.0f
+                });
+                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease)
                 {
-                    Console.WriteLine("[GMST] Editor ID was null!");
-                }
+                    EditorID = "fAutoAimMaxDistance",
+                    Data = 0.0f
+                });
+                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease)
+                {
+                    EditorID = "fAutoAimScreenPercentage",
+                    Data = 0.0f
+                });
+                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease)
+                {
+                    EditorID = "fAutoAimMaxDegrees3rdPerson",
+                    Data = 0.0f
+                });
+            }
+            if (settings.Value.GameSettings.disable_npcDodge) // disable ninja dodge
+            {
+                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease)
+                {
+                    EditorID = "fCombatDodgeChanceMax",
+                    Data = 0.0f
+                });
             }
             foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) {
                 var id = proj.EditorID;
