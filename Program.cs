@@ -11,7 +11,7 @@ namespace AATPatcher
 {
     public class Program
     {
-        public enum SoundLevel
+        public enum SoundLevel // todo: figure out what integers are used for sound levels
         {
             silent = 1,
             normal = 2,
@@ -68,7 +68,7 @@ namespace AATPatcher
             [Tooltip("Tweaks that are applied to Arrows."), SettingName("[PROJ] Arrow Projectiles")]
             public ProjectileTweaks ArrowTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent);
             [Tooltip("Tweaks that are applied to Bolts."), SettingName("[PROJ] Bolt Projectiles")]
-            public ProjectileTweaks BoltTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent);
+            public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.44f, SoundLevel.normal);
             [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("[PROJ] Throwable Projectiles")]
             public ProjectileTweaks ThrowableTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent);
             [Tooltip("Tweaks that are applied to Special Projectiles."), SettingName("[PROJ] Special Projectiles")]
