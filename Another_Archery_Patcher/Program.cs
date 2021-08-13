@@ -4,6 +4,7 @@ using Mutagen.Bethesda.Synthesis;
 using Mutagen.Bethesda.Skyrim;
 using System.Threading.Tasks;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
+using Mutagen.Bethesda.Plugins;
 
 namespace Another_Archery_Patcher
 {
@@ -36,8 +37,6 @@ namespace Another_Archery_Patcher
             [MaintainOrder]
             [Tooltip("Remove the supersonic flag from projectiles of this type. The supersonic flag removes sound from in-flight projectiles.")]
             public bool disable_supersonic;
-            [Tooltip("Projectiles in this list will not be modified."), SettingName("EditorID Blacklist")]
-            public string[] blacklist = { "MQ101ArrowSteelProjectile" };
             public GeneralTweaks(bool disableSupersonicFlag)
             {
                 disable_supersonic = disableSupersonicFlag;
@@ -87,6 +86,9 @@ namespace Another_Archery_Patcher
             public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.44f, SoundLevel.normal);
             [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("Throwable Tweaks")]
             public ProjectileTweaks ThrowableTweaks = new(true, 2600.0f, 0.34f, 1.0f, SoundLevel.silent);
+            [Tooltip("Projectiles in this list will be skipped."), SettingName("Blacklisted Projectiles")]
+            public IFormLinkGetter<IProjectileGetter> blacklist = FormLink<IProjectileGetter>.Null;
+            public string[] strblacklist = { "MQ101SteelArrowProjectile" };
             [Tooltip("Changes Game Settings. (GMST)"), SettingName("[GMST] Game Settings")]
             public GameSettings GameSettings = new(true, false);
         }
@@ -123,7 +125,7 @@ namespace Another_Archery_Patcher
         }
         public static bool IsBlacklisted(string editorID)
         {
-            foreach( string it in settings.Value.GeneralTweaks.blacklist)
+            foreach( string it in settings.Value.blacklist)
                 if ( it == editorID )
                     return true;
             return false;
