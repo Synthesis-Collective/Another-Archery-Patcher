@@ -87,7 +87,7 @@ namespace Another_Archery_Patcher
             [Tooltip("Tweaks that are applied to Arrows."), SettingName("Arrow Tweaks")]
             public ProjectileTweaks_Arrow ArrowTweaks = new(true, 5000.0f, 0.34f, 0.44f, SoundLevel.silent, true);
             [Tooltip("Tweaks that are applied to Bolts."), SettingName("Bolt Tweaks")]
-            public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.44f, SoundLevel.normal);
+            public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.64f, SoundLevel.normal);
             [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("Throwable Tweaks")]
             public ProjectileTweaks ThrowableTweaks = new(true, 2600.0f, 0.34f, 1.0f, SoundLevel.silent);
             [Tooltip("Projectiles in this list will be skipped without changing anything."), SettingName("Projectile Blacklist")]
