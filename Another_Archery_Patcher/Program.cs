@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Synthesis;
 using Mutagen.Bethesda.Skyrim;
@@ -87,8 +88,7 @@ namespace Another_Archery_Patcher
             [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("Throwable Tweaks")]
             public ProjectileTweaks ThrowableTweaks = new(true, 2600.0f, 0.34f, 1.0f, SoundLevel.silent);
             [Tooltip("Projectiles in this list will be skipped."), SettingName("Blacklisted Projectiles")]
-            public IFormLinkGetter<IProjectileGetter> blacklist = FormLink<IProjectileGetter>.Null;
-            public string[] strblacklist = { "MQ101SteelArrowProjectile" };
+            public List<IFormLinkGetter<IProjectileGetter>> blacklist = new();
             [Tooltip("Changes Game Settings. (GMST)"), SettingName("[GMST] Game Settings")]
             public GameSettings GameSettings = new(true, false);
         }
