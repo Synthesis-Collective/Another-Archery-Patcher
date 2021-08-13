@@ -89,7 +89,7 @@ namespace Another_Archery_Patcher
             [Tooltip("Tweaks that are applied to Bolts."), SettingName("Bolt Tweaks")]
             public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.64f, SoundLevel.normal);
             [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("Throwable Tweaks")]
-            public ProjectileTweaks ThrowableTweaks = new(true, 2600.0f, 0.34f, 1.0f, SoundLevel.silent);
+            public ProjectileTweaks ThrowableTweaks = new(true, 2800.0f, 0.13f, 1.1f, SoundLevel.silent);
             [Tooltip("Projectiles in this list will be skipped without changing anything."), SettingName("Projectile Blacklist")]
             public List<IFormLinkGetter<IProjectileGetter>> blacklist = new();
         }
