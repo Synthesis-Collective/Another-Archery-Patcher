@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Synthesis;
 using Mutagen.Bethesda.Skyrim;
 using System.Threading.Tasks;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
 
-namespace AATPatcher
+namespace Another_Archery_Patcher
 {
     public class Program
     {
