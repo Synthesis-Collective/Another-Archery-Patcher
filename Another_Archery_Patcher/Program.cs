@@ -125,9 +125,6 @@ namespace Another_Archery_Patcher
         }
         public static bool IsBlacklisted(string editorID)
         {
-            foreach( string it in settings.Value.blacklist)
-                if ( it == editorID )
-                    return true;
             return false;
         }
         // PATCHER FUNCTION
