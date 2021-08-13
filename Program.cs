@@ -38,6 +38,8 @@ namespace AATPatcher
             [MaintainOrder]
             [Tooltip("Remove the supersonic flag from projectiles of this type. The supersonic flag removes sound from in-flight projectiles.")]
             public bool disable_supersonic;
+            [Tooltip("Projectiles in this list will not be modified."), SettingName("EditorID Blacklist")]
+            public string[] blacklist = { "MQ101ArrowSteelProjectile" };
             public GeneralTweaks(bool disableSupersonicFlag)
             {
                 disable_supersonic = disableSupersonicFlag;
@@ -114,10 +116,17 @@ namespace AATPatcher
             projectile.SoundLevel = (uint)tweaks.soundLevel;
             if (projectile.Flags.HasFlag(Projectile.Flag.Supersonic) && settings.Value.GeneralTweaks.disable_supersonic) { projectile.Flags &= ~Projectile.Flag.Supersonic; }
         }
-        public static bool IsSpecial(string editorID)
+        public static bool IsBloodcursedArrow(string editorID)
         {
             foreach (string it in settings.Value.ArrowTweaks.bloodcursed_id)
                 if (it == editorID)
+                    return true;
+            return false;
+        }
+        public static bool IsBlacklisted(string editorID)
+        {
+            foreach( string it in settings.Value.GeneralTweaks.blacklist)
+                if ( it == editorID )
                     return true;
             return false;
         }
@@ -138,9 +147,9 @@ namespace AATPatcher
             }
             foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) { // iterate through winning projectile overrides
                 var id = proj.EditorID;
-                if (id != null && proj.Type == Projectile.TypeEnum.Arrow) // valid editor ID
+                if (id != null && proj.Type == Projectile.TypeEnum.Arrow && !IsBlacklisted(id)) // valid editor ID
                 {
-                    if (IsSpecial(id)) // check id against special projectiles
+                    if (IsBloodcursedArrow(id)) // check id against special projectiles
                     {
                         if (settings.Value.ArrowTweaks.disable_gravity_bloodcursed)
                         {
