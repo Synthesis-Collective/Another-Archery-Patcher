@@ -123,7 +123,7 @@ namespace Another_Archery_Patcher
         }
         public static bool IsBlacklisted(Mutagen.Bethesda.Skyrim.IProjectileGetter proj)
         {
-            return settings.Value.blacklist.Contains(proj); // check if the blacklist contains projectile
+            return settings.Value.blacklist.Contains(proj) || proj.EditorID == "MQ101ArrowSteelProjectile"; // check if the blacklist contains projectile
         }
         // PATCHER FUNCTION
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
