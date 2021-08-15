@@ -2,7 +2,7 @@
   "Nickname": "Another_Archery_Patcher",
   "Visibility": "Visible",
   "OneLineDescription": "Customizable Archery Physics for any load order.",
-  "LongDescription": "Archery physics the way you want, for any load order. Allows modifying the speed, gravity, impact force, noise level, and flags of projectiles, as well as removing auto-aim. Also allows you to set specific values for special projectiles like the bloodcursed elven arrows, for example, removing gravity from them.",
+  "LongDescription": "Archery physics the way you want, for any load order. Allows modifying the speed, gravity, impact force, noise level, and flags of projectiles, as well as removing auto-aim and fixing numerous bugs. (For example: The \"Ninja Dodge\" bug that has existed since launch, arrows colliding with the air in front of you, and more!) Comes with a complete settings menu that allows you to control everything.",
   "PreferredAutoVersioning": "Default",
   "RequiredMods": []
 }

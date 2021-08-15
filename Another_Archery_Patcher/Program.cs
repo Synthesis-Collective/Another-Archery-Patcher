@@ -91,7 +91,7 @@ namespace Another_Archery_Patcher
             [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("Throwable Tweaks")]
             public ProjectileTweaks ThrowableTweaks = new(true, 2800.0f, 0.13f, 1.1f, SoundLevel.silent);
             [Tooltip("Projectiles in this list will be skipped without changing anything."), SettingName("Projectile Blacklist")]
-            public List<IFormLinkGetter<IProjectileGetter>> blacklist = new();
+            public List<IFormLinkGetter<IProjectileGetter>> blacklist = new(); // projectile blacklist
         }
         static Lazy<TopLevelSettings> settings = null!;
         // MAIN
