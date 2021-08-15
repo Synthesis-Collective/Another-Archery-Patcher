@@ -87,9 +87,9 @@ namespace Another_Archery_Patcher
         public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.64f, SoundLevel.normal);
         [Tooltip("Tweaks that are applied to Throwable Weapons & Spears."), SettingName("Throwable Tweaks")]
         public ProjectileTweaks ThrowableTweaks = new(true, 2800.0f, 0.13f, 1.1f, SoundLevel.silent);
-        [Tooltip("Projectiles in this list will be skipped without changing anything."), SettingName("Projectile Blacklist")]
+        [Tooltip("(Searchable) Any projectiles added to this list will not be touched by the patcher."), SettingName("Projectile Blacklist")]
         public List<IFormLinkGetter<IProjectileGetter>> blacklist = new(); // projectile blacklist
-        [Tooltip("Form IDs in this list will be skipped without changing anything."), SettingName("Form ID Blacklist")]
+        [Tooltip("(Non-Searchable) Any projectile Form IDs or Editor IDs added to this list will not be touched by the patcher."), SettingName("Editor ID/Form ID Blacklist")]
         public List<string> id_blacklist = new() { "MQ101ArrowSteelProjectile" };
     }
 }

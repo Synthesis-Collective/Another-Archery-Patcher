@@ -25,7 +25,7 @@ namespace Another_Archery_Patcher
         }
         private static bool IsBlacklisted(Mutagen.Bethesda.Skyrim.IProjectileGetter proj)
         {
-            return settings.Value.blacklist.Contains(proj) || settings.Value.id_blacklist.Contains(proj.EditorID!.ToString()); // check if the blacklist or formid blacklist contains projectile
+            return settings.Value.blacklist.Contains(proj) || settings.Value.id_blacklist.Contains(proj.EditorID!.ToString()) || settings.Value.id_blacklist.Contains(proj.FormKey.IDString()); // check if the blacklists contain projectile
         }
         private static Lazy<TopLevelSettings> settings = null!;
         public static async Task<int> Main(string[] args)
