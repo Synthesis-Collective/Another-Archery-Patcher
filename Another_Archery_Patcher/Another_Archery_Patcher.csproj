@@ -4,14 +4,17 @@
     <TargetFramework>net5.0</TargetFramework>
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <SignAssembly>False</SignAssembly>
+    <ApplicationIcon>X:\_Workspace\_repo\Another-Archery-Tweak_Synthesis\Another_Archery_Patcher\bow.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -23,4 +26,8 @@
     <PackageReference Include="Mutagen.Bethesda" Version="0.30.6" />
     <PackageReference Include="Mutagen.Bethesda.Synthesis" Version="0.19.2" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="cp -r ./Data ./bin/Release/net5.0/" />
+  </Target>
 </Project>
