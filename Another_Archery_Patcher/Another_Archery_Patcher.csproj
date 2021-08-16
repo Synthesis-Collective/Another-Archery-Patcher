@@ -26,8 +26,4 @@
     <PackageReference Include="Mutagen.Bethesda" Version="0.30.6" />
     <PackageReference Include="Mutagen.Bethesda.Synthesis" Version="0.19.2" />
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="cp -r ./Data ./bin/Release/net5.0/" />
-  </Target>
 </Project>
