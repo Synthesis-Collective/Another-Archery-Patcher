@@ -350,3 +350,5 @@ MigrationBackup/
 .ionide/
 /Another-Archery-Patcher/*
 /temp.cs
+
+settings.json
