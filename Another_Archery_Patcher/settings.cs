@@ -51,7 +51,7 @@ namespace Another_Archery_Patcher
         public Matchable(List<string>? matchlist, bool enabled = true)
         {
             _enabled = enabled;
-            _matchlist = matchlist == null ? new() : matchlist;
+            _matchlist = matchlist ?? (new());
         }
         public bool IsMatch(string? id, bool allow_partial_match = true)
         {
