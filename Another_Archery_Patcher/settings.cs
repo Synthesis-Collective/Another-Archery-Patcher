@@ -106,10 +106,6 @@ namespace Another_Archery_Patcher
         {
             stats = new ProjectileStats(proj_speed, proj_gravity, proj_impactForce, proj_soundLevel);
         }
-        public ProjectileTweaks(bool enable, ProjectileStats proj_stats, List<string>? matchable_ids = null) : base(matchable_ids, enable)
-        {
-            stats = proj_stats;
-        }
         [MaintainOrder]
         [SettingName("Stats")]
         public ProjectileStats stats;
