@@ -3,6 +3,7 @@ using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Another_Archery_Patcher
 {
@@ -18,97 +19,91 @@ namespace Another_Archery_Patcher
     }
     public class GameSettings // game setting settings
     {
-        public GameSettings(bool disableAutoAim, bool disableNPCDodge)
+        public GameSettings(bool disableAutoAim, bool disableNpcDodge)
         {
-            disable_autoaim = disableAutoAim;
-            disable_npcDodge = disableNPCDodge;
+            DisableAutoaim = disableAutoAim;
+            DisableNpcDodge = disableNpcDodge;
         }
         [MaintainOrder]
         [SettingName("Disable Auto-Aim"), Tooltip("Removes the terrible vanilla auto-aim from 1st and 3rd person.")]
-        public bool disable_autoaim = true;
+        public bool DisableAutoaim;
         [SettingName("Patch NPC Ninja Dodge Bug"), Tooltip("Prevents NPCs from dodging your arrows at range.")]
-        public bool disable_npcDodge = true;
+        public bool DisableNpcDodge;
     }
     public class MiscTweaks // misc projectile tweaks
     {
         public MiscTweaks(bool disableSupersonicFlag, bool removeBloodcursedGravity, bool patchTraps)
         {
-            disable_supersonic = disableSupersonicFlag;
-            disable_gravity_bloodcursed = removeBloodcursedGravity;
-            patch_traps = patchTraps;
+            DisableSupersonic = disableSupersonicFlag;
+            DisableGravityBloodcursed = removeBloodcursedGravity;
+            PatchTraps = patchTraps;
         }
         [MaintainOrder]
         [Tooltip("Remove the supersonic flag from projectiles of this type. The supersonic flag removes sound from in-flight projectiles.")]
-        public bool disable_supersonic;
-        [Ignore] public List<string> bloodcursed_id = new() { "DCL1ArrowElvenBloodProjectile", "DLC1AurielsBloodDippedProjectile" }; // Editor ID list of bloodcursed arrows
+        public bool DisableSupersonic;
+        [Ignore] public List<string> BloodcursedId = new() { "DCL1ArrowElvenBloodProjectile", "DLC1AurielsBloodDippedProjectile" }; // Editor ID list of bloodcursed arrows
         [SettingName("No Gravity for Bloodcursed Arrows"), Tooltip("Makes it easier/possible to hit the sun with the Dawnguard DLC's Bloodcursed Elven Arrows")]
-        public bool disable_gravity_bloodcursed;
+        public bool DisableGravityBloodcursed;
         [SettingName("Patch Trap Projectiles"), Tooltip("Modifies most of the projectiles fired by dart traps & dwemer ballista traps to be more interesting. (If anyone wants to customize the values, let me know and I'll add it)")]
-        public bool patch_traps;
+        public bool PatchTraps;
     }
     public class Matchable // Base class used to indicate that an object can be matched against editor IDs
     {
         public Matchable(List<string>? matchlist, bool enabled = true)
         {
-            _enabled = enabled;
-            _matchlist = matchlist ?? (new());
+            Enabled = enabled;
+            Matchlist = matchlist ?? (new List<string>());
         }
-        public bool IsMatch(string? id, bool allow_partial_match = true)
+        public bool IsMatch(string? id, bool allowPartialMatch = true)
         {
-            if (id != null && _enabled && _matchlist.Count > 0) {
-                if (!allow_partial_match)
-                    return _matchlist.Contains(id);
-                foreach(var comp in _matchlist)
-                    if (id.Contains(comp, StringComparison.OrdinalIgnoreCase) || comp == id)
-                        return true;
-            }
-            return false;
+            if (id == null || !Enabled || Matchlist.Count <= 0) return false;
+            return !allowPartialMatch ? Matchlist.Contains(id) : Matchlist.Any(comp => id.Contains(comp, StringComparison.OrdinalIgnoreCase) || comp == id);
         }
         [MaintainOrder]
         [SettingName("Enable"), JsonDiskName("enabled")]
-        public bool _enabled;
+        public bool Enabled;
         [SettingName("Common Names"), JsonDiskName("matchlist"), Tooltip("(Don't change this unless you know what you're doing!) Used to resolve projectile type, as there is no other way to distinguish between arrows/bolts/other")]
-        public List<string> _matchlist;
+        public List<string> Matchlist;
     }
     public class MatchableRecord : Matchable
     {
         public MatchableRecord(List<string> blacklistedIDs, List<IFormLinkGetter<IProjectileGetter>> blacklistedRecords) : base(blacklistedIDs)
         {
-            record = blacklistedRecords;
+            Record = blacklistedRecords;
         }
         [MaintainOrder]
         [SettingName("Records")]
-        public List<IFormLinkGetter<IProjectileGetter>> record;
+        public List<IFormLinkGetter<IProjectileGetter>> Record;
     }
     public class ProjectileStats // Contains projectile stats only. Used to maintain ordering with inheritance
     {
-        public ProjectileStats(float proj_speed, float proj_gravity, float proj_impactForce, SoundLevel proj_soundLevel)
+        public ProjectileStats(float projSpeed, float projGravity, float projImpactForce, SoundLevel projSoundLevel)
         {
-            speed = proj_speed;
-            gravity = proj_gravity;
-            impactForce = proj_impactForce;
-            soundLevel = proj_soundLevel;
+            Speed = projSpeed;
+            Gravity = projGravity;
+            ImpactForce = projImpactForce;
+            SoundLevel = projSoundLevel;
         }
         [MaintainOrder]
         [SettingName("Speed"), Tooltip("The speed of this type of projectile. Controls projectile drop.")]
-        public float speed;
+        public float Speed;
         [SettingName("Gravity"), Tooltip("The amount of gravity applied to this type of projectile. Controls projectile drop.")]
-        public float gravity;
+        public float Gravity;
         [SettingName("Impact Force"), Tooltip("The amount of force imparted into objects hit by projectiles of this type.")]
-        public float impactForce;
+        public float ImpactForce;
         [SettingName("Sound Level"), Tooltip("The amount of detectable noise produced by in-flight projectiles.")]
-        public SoundLevel soundLevel;
+        public SoundLevel SoundLevel;
     }
 
     public class ProjectileTweaks : Matchable // Matchable projectile stats wrapper
     {
-        public ProjectileTweaks(bool enable, float proj_speed, float proj_gravity, float proj_impactForce, SoundLevel proj_soundLevel, List<string>? matchable_ids = null) : base(matchable_ids, enable)
+        public ProjectileTweaks(bool enable, float projSpeed, float projGravity, float projImpactForce, SoundLevel projSoundLevel, List<string>? matchableIds = null) : base(matchableIds, enable)
         {
-            stats = new ProjectileStats(proj_speed, proj_gravity, proj_impactForce, proj_soundLevel);
+            Stats = new ProjectileStats(projSpeed, projGravity, projImpactForce, projSoundLevel);
         }
         [MaintainOrder]
         [SettingName("Stats")]
-        public ProjectileStats stats;
+        public ProjectileStats Stats;
     }
     public class TopLevelSettings // top level settings object
     {
@@ -124,8 +119,8 @@ namespace Another_Archery_Patcher
         [SettingName("Throwable Tweaks"), Tooltip("This includes Reikling Spears, and throwing weapons from some other mods.")]
         public ProjectileTweaks ThrowableTweaks = new(true, 2800.0f, 0.13f, 1.1f, Silent, new() { "Riekling", "SSM", "Throw" });
         [SettingName("Blacklist"), Tooltip("Any projectiles specified here will not be modified.")]
-        public MatchableRecord blacklist = new(new() { "MQ101ArrowSteelProjectile" }, new());
+        public MatchableRecord Blacklist = new(new() { "MQ101ArrowSteelProjectile" }, new());
         [SettingName("Verbose Log"), JsonDiskName("verbose-log"), Tooltip("Writes additional information to the log, useful for debugging.")]
-        public bool _use_verbose_log = true;
+        public bool UseVerboseLog = true;
     }
 }
