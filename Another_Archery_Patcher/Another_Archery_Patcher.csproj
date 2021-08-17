@@ -4,7 +4,6 @@
     <TargetFramework>net5.0</TargetFramework>
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <SignAssembly>False</SignAssembly>
-    <ApplicationIcon>X:\_Workspace\_repo\Another-Archery-Tweak_Synthesis\Another_Archery_Patcher\bow.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
