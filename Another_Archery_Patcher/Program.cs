@@ -102,13 +102,13 @@ namespace Another_Archery_Patcher
                 // Priority 1 - Bloodcursed Arrows
                 if (Settings.MiscTweaks.BloodcursedId.Contains(id, StringComparer.OrdinalIgnoreCase))
                 {
-                    count = Settings.MiscTweaks.DisableGravityBloodcursed ? HandleProjectile(count, state, proj, new(true, Settings.ArrowTweaks.Stats.Speed, 0.0f, Settings.ArrowTweaks.Stats.ImpactForce, Settings.ArrowTweaks.Stats.SoundLevel), "Finished processing bloodcursed arrow: \"" + id + "\" (Disabled Gravity)") : HandleProjectile(count, state, proj, Settings.ArrowTweaks, "Finished processing arrow: \"" + id + '\"');
+                    count = Settings.MiscTweaks.DisableGravityBloodcursed ? HandleProjectile(count, state, proj, new ProjectileTweaks(true, Settings.ArrowTweaks.Stats.Speed, 0.0f, Settings.ArrowTweaks.Stats.ImpactForce, Settings.ArrowTweaks.Stats.SoundLevel), "Finished processing bloodcursed arrow: \"" + id + "\" (Disabled Gravity)") : HandleProjectile(count, state, proj, Settings.ArrowTweaks, "Finished processing arrow: \"" + id + '\"');
                 }
                 // Priority 2 - Trap Projectiles
                 else if (id.Contains("Trap", StringComparison.OrdinalIgnoreCase))
                 {
                     // handle ballista trap bolts
-                    count = id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(count, state, proj, new(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished processing trap: \"" + id + '\"', "Ballista Trap Bolt") : HandleProjectileManual(count, state, proj, new(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"');
+                    count = id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(count, state, proj, new ProjectileStats(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished processing trap: \"" + id + '\"', "Ballista Trap Bolt") : HandleProjectileManual(count, state, proj, new(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"');
                 }
                 // Priority 3 - Throwable Projectiles
                 else if (Settings.ThrowableTweaks.IsMatch(id))
@@ -125,7 +125,7 @@ namespace Another_Archery_Patcher
             Console.WriteLine("--- END PATCHER PROCESS ---");
             if (Settings.UseVerboseLog) {
                 if (count == 0 && !gmstModified)
-                    Console.WriteLine("[WARNING]\tNo records were modified!");
+                    Console.WriteLine("[WARNING]\tNo records were modified! (Check your settings, is anything enabled?)");
                 else if (count > 0)
                     Console.WriteLine("Processed " + count + " records.");
             }
