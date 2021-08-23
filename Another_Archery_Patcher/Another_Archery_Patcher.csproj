@@ -5,7 +5,6 @@
 		<TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
 		<IsPublishable>True</IsPublishable>
 		<DebugType>embedded</DebugType>
-		<ApplicationIcon>X:\_Workspace\_repo\Another-Archery-Tweak_Synthesis\bow.ico</ApplicationIcon>
 		<ErrorReport>none</ErrorReport>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
