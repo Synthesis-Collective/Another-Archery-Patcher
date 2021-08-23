@@ -1,0 +1,6 @@
+<map id="Another_Archery_Patcher.ProjectileTweaks" name="Another_Archery_Patcher.ProjectileTweaks">
+<area shape="rect" id="node1" title="Represents a section of the settings menu that is applied to a subset of projectiles." alt="" coords="5,199,180,240"/>
+<area shape="rect" id="node2" href="$class_another___archery___patcher_1_1_matchable.html" title="Base class that allows disabling itself, and exposes a list of strings used for matching records agai..." alt="" coords="30,102,113,129"/>
+<area shape="rect" id="node3" href="$class_another___archery___patcher_1_1_projectile_stats.html" title="Contains common DATA stats for PROJ records." alt="" coords="137,95,312,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="181,5,269,32"/>
+</map>

@@ -1,0 +1,147 @@
+\hypertarget{class_another___archery___patcher_1_1_top_level_settings}{}\doxysection{Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings Class Reference}
+\label{class_another___archery___patcher_1_1_top_level_settings}\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+
+
+Contains all settings used by the patcher.  
+
+
+
+
+Collaboration diagram for Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_another___archery___patcher_1_1_top_level_settings__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_another___archery___patcher_1_1_game_settings}{Game\+Settings}} \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_a9c602c4ef5e464a16d9fc215334719f1}{Game\+Settings}} = new(true, true)
+\begin{DoxyCompactList}\small\item\em Contains toggles for Game Setting changes. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_another___archery___patcher_1_1_misc_tweaks}{Misc\+Tweaks}} \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_a1348df63c7451133d748adbeb92e9ef1}{Misc\+Tweaks}} = new(true, true, true)
+\begin{DoxyCompactList}\small\item\em Contains toggles for miscellaneous/global tweaks that are applied to all modified records. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_another___archery___patcher_1_1_projectile_tweaks}{Projectile\+Tweaks}} \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_a3ad5a34f75276e5c5bb8cf942dc73cdd}{Arrow\+Tweaks}} = new(true, 5000.\+0f, 0.\+34f, 0.\+44f, Silent, new List$<$string$>$ \{ \char`\"{}Arrow\char`\"{} \})
+\begin{DoxyCompactList}\small\item\em Values that are applied to Arrows. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_another___archery___patcher_1_1_projectile_tweaks}{Projectile\+Tweaks}} \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_aa801e7680960c085799dc3edb8d6070b}{Bolt\+Tweaks}} = new(true, 5800.\+0f, 0.\+34f, 0.\+64f, Normal, new List$<$string$>$ \{ \char`\"{}Bolt\char`\"{} \})
+\begin{DoxyCompactList}\small\item\em Values that are applied to Bolts. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_another___archery___patcher_1_1_projectile_tweaks}{Projectile\+Tweaks}} \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_a5dd14ea9bc3cf9373f3cccff8068cbc8}{Throwable\+Tweaks}} = new(true, 2800.\+0f, 0.\+13f, 1.\+1f, Silent, new List$<$string$>$ \{ \char`\"{}Riekling\char`\"{}, \char`\"{}SSM\char`\"{}, \char`\"{}Throw\char`\"{} \})
+\begin{DoxyCompactList}\small\item\em Values that are applied to throwable weapons, like spears. (In vanilla, this is only applied to the Riekling Spear.) \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_another___archery___patcher_1_1_matchable_record}{Matchable\+Record}} \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_a5fa42c069336b06e565e220d383a6a32}{Blacklist}} = new(new List$<$string$>$ \{ \char`\"{}MQ101\+Arrow\+Steel\+Projectile\char`\"{} \}, new List$<$IForm\+Link\+Getter$<$IProjectile\+Getter$>$$>$())
+\begin{DoxyCompactList}\small\item\em Used to ignore certain projectiles used in quests / other projectiles that are sensitive to modification. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_another___archery___patcher_1_1_top_level_settings_ac52c34014e8e5b39b5a80707f941a157}{Use\+Verbose\+Log}} = true
+\begin{DoxyCompactList}\small\item\em Toggles verbose console logging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains all settings used by the patcher. 
+
+Definition at line 146 of file settings.\+cs.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_a3ad5a34f75276e5c5bb8cf942dc73cdd}\label{class_another___archery___patcher_1_1_top_level_settings_a3ad5a34f75276e5c5bb8cf942dc73cdd}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!ArrowTweaks@{ArrowTweaks}}
+\index{ArrowTweaks@{ArrowTweaks}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{ArrowTweaks}{ArrowTweaks}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_another___archery___patcher_1_1_projectile_tweaks}{Projectile\+Tweaks}} Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Arrow\+Tweaks = new(true, 5000.\+0f, 0.\+34f, 0.\+44f, Silent, new List$<$string$>$ \{ \char`\"{}Arrow\char`\"{} \})}
+
+
+
+Values that are applied to Arrows. 
+
+
+
+Definition at line 154 of file settings.\+cs.
+
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_a5fa42c069336b06e565e220d383a6a32}\label{class_another___archery___patcher_1_1_top_level_settings_a5fa42c069336b06e565e220d383a6a32}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!Blacklist@{Blacklist}}
+\index{Blacklist@{Blacklist}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{Blacklist}{Blacklist}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_another___archery___patcher_1_1_matchable_record}{Matchable\+Record}} Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Blacklist = new(new List$<$string$>$ \{ \char`\"{}MQ101\+Arrow\+Steel\+Projectile\char`\"{} \}, new List$<$IForm\+Link\+Getter$<$IProjectile\+Getter$>$$>$())}
+
+
+
+Used to ignore certain projectiles used in quests / other projectiles that are sensitive to modification. 
+
+
+
+Definition at line 160 of file settings.\+cs.
+
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_aa801e7680960c085799dc3edb8d6070b}\label{class_another___archery___patcher_1_1_top_level_settings_aa801e7680960c085799dc3edb8d6070b}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!BoltTweaks@{BoltTweaks}}
+\index{BoltTweaks@{BoltTweaks}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{BoltTweaks}{BoltTweaks}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_another___archery___patcher_1_1_projectile_tweaks}{Projectile\+Tweaks}} Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Bolt\+Tweaks = new(true, 5800.\+0f, 0.\+34f, 0.\+64f, Normal, new List$<$string$>$ \{ \char`\"{}Bolt\char`\"{} \})}
+
+
+
+Values that are applied to Bolts. 
+
+
+
+Definition at line 156 of file settings.\+cs.
+
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_a9c602c4ef5e464a16d9fc215334719f1}\label{class_another___archery___patcher_1_1_top_level_settings_a9c602c4ef5e464a16d9fc215334719f1}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!GameSettings@{GameSettings}}
+\index{GameSettings@{GameSettings}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{GameSettings}{GameSettings}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_another___archery___patcher_1_1_game_settings}{Game\+Settings}} Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Game\+Settings = new(true, true)}
+
+
+
+Contains toggles for Game Setting changes. 
+
+
+
+Definition at line 150 of file settings.\+cs.
+
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_a1348df63c7451133d748adbeb92e9ef1}\label{class_another___archery___patcher_1_1_top_level_settings_a1348df63c7451133d748adbeb92e9ef1}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!MiscTweaks@{MiscTweaks}}
+\index{MiscTweaks@{MiscTweaks}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{MiscTweaks}{MiscTweaks}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_another___archery___patcher_1_1_misc_tweaks}{Misc\+Tweaks}} Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Misc\+Tweaks = new(true, true, true)}
+
+
+
+Contains toggles for miscellaneous/global tweaks that are applied to all modified records. 
+
+
+
+Definition at line 152 of file settings.\+cs.
+
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_a5dd14ea9bc3cf9373f3cccff8068cbc8}\label{class_another___archery___patcher_1_1_top_level_settings_a5dd14ea9bc3cf9373f3cccff8068cbc8}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!ThrowableTweaks@{ThrowableTweaks}}
+\index{ThrowableTweaks@{ThrowableTweaks}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{ThrowableTweaks}{ThrowableTweaks}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_another___archery___patcher_1_1_projectile_tweaks}{Projectile\+Tweaks}} Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Throwable\+Tweaks = new(true, 2800.\+0f, 0.\+13f, 1.\+1f, Silent, new List$<$string$>$ \{ \char`\"{}Riekling\char`\"{}, \char`\"{}SSM\char`\"{}, \char`\"{}Throw\char`\"{} \})}
+
+
+
+Values that are applied to throwable weapons, like spears. (In vanilla, this is only applied to the Riekling Spear.) 
+
+
+
+Definition at line 158 of file settings.\+cs.
+
+\mbox{\Hypertarget{class_another___archery___patcher_1_1_top_level_settings_ac52c34014e8e5b39b5a80707f941a157}\label{class_another___archery___patcher_1_1_top_level_settings_ac52c34014e8e5b39b5a80707f941a157}} 
+\index{Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}!UseVerboseLog@{UseVerboseLog}}
+\index{UseVerboseLog@{UseVerboseLog}!Another\_Archery\_Patcher.TopLevelSettings@{Another\_Archery\_Patcher.TopLevelSettings}}
+\doxysubsubsection{\texorpdfstring{UseVerboseLog}{UseVerboseLog}}
+{\footnotesize\ttfamily bool Another\+\_\+\+Archery\+\_\+\+Patcher.\+Top\+Level\+Settings.\+Use\+Verbose\+Log = true}
+
+
+
+Toggles verbose console logging. 
+
+
+
+Definition at line 162 of file settings.\+cs.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{settings_8cs}{settings.\+cs}}\end{DoxyCompactItemize}

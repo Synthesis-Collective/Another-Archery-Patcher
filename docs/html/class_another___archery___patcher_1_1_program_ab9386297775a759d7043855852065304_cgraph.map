@@ -1,0 +1,5 @@
+<map id="Another_Archery_Patcher.Program.Main" name="Another_Archery_Patcher.Program.Main">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,180,47"/>
+<area shape="rect" id="node2" href="$class_another___archery___patcher_1_1_program.html#a3e74a59cb6cc639d409324e09749d6c4" title=" " alt="" coords="228,5,403,47"/>
+<area shape="rect" id="node3" href="$class_another___archery___patcher_1_1_matchable.html#ae94bf2b49059ab5ddc5cda8402484e69" title="Checks if the given Editor ID or Form ID is a case&#45;insensitive match for any of the strings in the ma..." alt="" coords="451,5,625,47"/>
+</map>

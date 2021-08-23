@@ -1,0 +1,4 @@
+<map id="Another_Archery_Patcher.MatchableRecord" name="Another_Archery_Patcher.MatchableRecord">
+<area shape="rect" id="node1" title="Represents a list of Records that are used for the record blacklisting feature." alt="" coords="5,80,180,121"/>
+<area shape="rect" id="node2" href="$class_another___archery___patcher_1_1_matchable.html" title="Base class that allows disabling itself, and exposes a list of strings used for matching records agai..." alt="" coords="51,5,134,32"/>
+</map>

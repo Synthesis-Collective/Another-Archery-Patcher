@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_another___archery___patcher_1_1_matchable.html" title="Base class that allows disabling itself, and exposes a list of strings used for matching records agai..." alt="" coords="5,39,180,80"/>
+<area shape="rect" id="node2" href="$class_another___archery___patcher_1_1_matchable_record.html" title="Represents a list of Records that are used for the record blacklisting feature." alt="" coords="228,5,403,47"/>
+<area shape="rect" id="node3" href="$class_another___archery___patcher_1_1_projectile_tweaks.html" title="Represents a section of the settings menu that is applied to a subset of projectiles." alt="" coords="228,71,403,112"/>
+</map>

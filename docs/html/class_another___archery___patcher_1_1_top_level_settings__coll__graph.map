@@ -1,0 +1,10 @@
+<map id="Another_Archery_Patcher.TopLevelSettings" name="Another_Archery_Patcher.TopLevelSettings">
+<area shape="rect" id="node1" title="Contains all settings used by the patcher." alt="" coords="796,113,971,155"/>
+<area shape="rect" id="node2" href="$class_another___archery___patcher_1_1_matchable_record.html" title="Represents a list of Records that are used for the record blacklisting feature." alt="" coords="471,5,645,47"/>
+<area shape="rect" id="node3" href="$class_another___archery___patcher_1_1_matchable.html" title="Base class that allows disabling itself, and exposes a list of strings used for matching records agai..." alt="" coords="258,18,341,45"/>
+<area shape="rect" id="node6" href="$class_another___archery___patcher_1_1_projectile_tweaks.html" title="Represents a section of the settings menu that is applied to a subset of projectiles." alt="" coords="471,71,645,112"/>
+<area shape="rect" id="node4" href="$class_another___archery___patcher_1_1_misc_tweaks.html" title="Contains settings that are applied to all PROJ records, and additional toggles that don&#39;t fit into th..." alt="" coords="471,136,645,177"/>
+<area shape="rect" id="node5" href="$class_another___archery___patcher_1_1_game_settings.html" title="Contains all settings related to modifying GMST ( Game Setting ) records." alt="" coords="471,201,645,243"/>
+<area shape="rect" id="node7" href="$class_another___archery___patcher_1_1_projectile_stats.html" title="Contains common DATA stats for PROJ records." alt="" coords="212,73,387,115"/>
+<area shape="rect" id="node8" title=" " alt="" coords="5,81,93,107"/>
+</map>
