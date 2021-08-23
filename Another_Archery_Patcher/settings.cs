@@ -1,9 +1,9 @@
-using Mutagen.Bethesda.Plugins;
-using Mutagen.Bethesda.Skyrim;
-using Mutagen.Bethesda.WPF.Reflection.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mutagen.Bethesda.Plugins;
+using Mutagen.Bethesda.Skyrim;
+using Mutagen.Bethesda.WPF.Reflection.Attributes;
 
 namespace Another_Archery_Patcher
 {

@@ -1,9 +1,9 @@
-using Mutagen.Bethesda;
-using Mutagen.Bethesda.Skyrim;
-using Mutagen.Bethesda.Synthesis;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Mutagen.Bethesda;
+using Mutagen.Bethesda.Skyrim;
+using Mutagen.Bethesda.Synthesis;
 
 namespace Another_Archery_Patcher
 {
@@ -99,24 +99,19 @@ namespace Another_Archery_Patcher
             {
                 // iterate through winning projectile overrides (this includes all projectile records added by mods)
                 if (!IsValidPatchTarget(proj, out string id)) continue;
-                // Priority 1 - Bloodcursed Arrows
-                if (Settings.MiscTweaks.BloodcursedId.Contains(id, StringComparer.OrdinalIgnoreCase))
-                {
+                if ( Settings.MiscTweaks.BloodcursedId.Contains(id, StringComparer.OrdinalIgnoreCase) ) // Priority 1 - Bloodcursed Arrows
                     count = Settings.MiscTweaks.DisableGravityBloodcursed ? HandleProjectile(count, state, proj, new ProjectileTweaks(true, Settings.ArrowTweaks.Stats.Speed, 0.0f, Settings.ArrowTweaks.Stats.ImpactForce, Settings.ArrowTweaks.Stats.SoundLevel), "Finished processing bloodcursed arrow: \"" + id + "\" (Disabled Gravity)") : HandleProjectile(count, state, proj, Settings.ArrowTweaks, "Finished processing arrow: \"" + id + '\"');
-                }
-                // Priority 2 - Trap Projectiles
-                else if (id.Contains("Trap", StringComparison.OrdinalIgnoreCase)) // handle ballista trap bolts
+                else if ( id.Contains("Trap", StringComparison.OrdinalIgnoreCase) ) // Priority 2 - Trap Projectiles
                     count = id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(count, state, proj, new ProjectileStats(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished processing trap: \"" + id + '\"', "Ballista Trap Bolt") : HandleProjectileManual(count, state, proj, new ProjectileStats(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"');
-                // Priority 3 - Throwable Projectiles
-                else if (Settings.ThrowableTweaks.IsMatch(id))
+                else if ( Settings.ThrowableTweaks.IsMatch(id) ) // Priority 3 - Throwable Projectiles
                     count = HandleProjectile(count, state, proj, Settings.ThrowableTweaks, "Finished processing spear: \"" + id + '\"');
                 // Priority 4 - Arrow Projectiles
-                else if (Settings.ArrowTweaks.IsMatch(id))
+                else if ( Settings.ArrowTweaks.IsMatch(id) )
                     count = HandleProjectile(count, state, proj, Settings.ArrowTweaks, "Finished processing arrow: \"" + id + '\"');
                 // Priority 5 - Bolt Projectiles
-                else if (Settings.BoltTweaks.IsMatch(id))
+                else if ( Settings.BoltTweaks.IsMatch(id) )
                     count = HandleProjectile(count, state, proj, Settings.BoltTweaks, "Finished processing bolt: \"" + id + '\"');
-                else if (Settings.UseVerboseLog)
+                else if ( Settings.UseVerboseLog )
                     Console.WriteLine("Skipping projectile: \"" + id + '\"');
             }
             Console.WriteLine("--- END PATCHER PROCESS ---");
