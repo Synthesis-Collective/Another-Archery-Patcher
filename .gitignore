@@ -351,4 +351,5 @@ MigrationBackup/
 /Another-Archery-Patcher/*
 /temp.cs
 
-settings.json
+*settings.json
+docs/
