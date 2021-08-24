@@ -1,52 +1,72 @@
-using Mutagen.Bethesda;
-using Mutagen.Bethesda.Skyrim;
-using Mutagen.Bethesda.Synthesis;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Mutagen.Bethesda;
+using Mutagen.Bethesda.Skyrim;
+using Mutagen.Bethesda.Synthesis;
 
 namespace Another_Archery_Patcher
 {
     public class Program
     {
-        private static int HandleProjectile(int recordCounter, IPatcherState<ISkyrimMod, ISkyrimModGetter> state, IProjectileGetter proj, ProjectileTweaks tweaks, string logMessage = "")
+        private static bool HandleProjectile(IPatcherState<ISkyrimMod, ISkyrimModGetter> state, IProjectileGetter proj, ProjectileTweaks tweaks, string logMessage = "")
         {
-            var projectile = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
-            projectile.Speed = tweaks.Stats.Speed;
-            projectile.Gravity = tweaks.Stats.Gravity;
-            projectile.ImpactForce = tweaks.Stats.ImpactForce;
-            projectile.SoundLevel = (uint)tweaks.Stats.SoundLevel;
-            if (projectile.Flags.HasFlag(Projectile.Flag.Supersonic) && Settings.MiscTweaks.DisableSupersonic)
-                projectile.Flags &= ~Projectile.Flag.Supersonic;
-            if (logMessage.Any())
-                Console.WriteLine(logMessage);
-            return ++recordCounter;
+            try {
+                var projectile = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
+                projectile.Speed = tweaks.Stats.Speed;
+                projectile.Gravity = tweaks.Stats.Gravity;
+                projectile.ImpactForce = tweaks.Stats.ImpactForce;
+                projectile.SoundLevel = (uint)tweaks.Stats.SoundLevel;
+                if (projectile.Flags.HasFlag(Projectile.Flag.Supersonic) && Settings.MiscTweaks.DisableSupersonic)
+                    projectile.Flags &= ~Projectile.Flag.Supersonic;
+                if (logMessage.Any())
+                    Console.WriteLine(logMessage);
+            } catch (Exception?) {
+                return false;
+            }
+            return true;
         }
-        private static int HandleProjectileManual(int recordCounter, IPatcherState<ISkyrimMod, ISkyrimModGetter> state, IProjectileGetter proj, ProjectileStats stats, string logMessage = "", string? nameOverride = null)
+        private static bool HandleProjectileManual(IPatcherState<ISkyrimMod, ISkyrimModGetter> state, IProjectileGetter proj, ProjectileStats stats, string logMessage = "", string? nameOverride = null)
         {
-            var projectile = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
-            projectile.Speed = stats.Speed;
-            projectile.Gravity = stats.Gravity;
-            projectile.ImpactForce = stats.ImpactForce;
-            projectile.SoundLevel = (uint)stats.SoundLevel;
-            if (projectile.Flags.HasFlag(Projectile.Flag.Supersonic) && Settings.MiscTweaks.DisableSupersonic)
-                projectile.Flags &= ~Projectile.Flag.Supersonic;
-            if (nameOverride != null)
-                projectile.Name = nameOverride;
-            if (logMessage.Any())
-                Console.WriteLine(logMessage);
-            return ++recordCounter;
+            try {
+                var projectile = state.PatchMod.Projectiles.GetOrAddAsOverride(proj);
+                projectile.Speed = stats.Speed;
+                projectile.Gravity = stats.Gravity;
+                projectile.ImpactForce = stats.ImpactForce;
+                projectile.SoundLevel = (uint)stats.SoundLevel;
+                if (projectile.Flags.HasFlag(Projectile.Flag.Supersonic) && Settings.MiscTweaks.DisableSupersonic)
+                    projectile.Flags &= ~Projectile.Flag.Supersonic;
+                if (nameOverride != null)
+                    projectile.Name = nameOverride;
+                if (logMessage.Any())
+                    Console.WriteLine(logMessage);
+            } catch (Exception?) {
+                return false;
+            }
+            return true;
+        }
+        private static bool HandleRecord(IPatcherState<ISkyrimMod, ISkyrimModGetter> state, IProjectileGetter proj, string id, ProjectileTweaks tweak, string log_message = "")
+        {
+
+            if (Settings.MiscTweaks.DisableGravityBloodcursed && Settings.MiscTweaks.BloodcursedId.Contains(id, StringComparer.OrdinalIgnoreCase))
+            {
+                return HandleProjectileManual(state, proj,
+                    new ProjectileStats(tweak.Stats.Speed, 0.0f, tweak.Stats.ImpactForce,
+                        tweak.Stats.SoundLevel), "Finished Processing Bloodcursed arrow: \"" + id + "\"");
+            }
+            return HandleProjectile(state, proj, tweak, "Finished Processing: \"" + id + "\"");
         }
         private static bool IsValidPatchTarget(IProjectileGetter proj, out string editorId)
         {
             if (proj.EditorID != null) { // Editor ID is valid, check if projectile type is valid & projectile isn't present on any blacklist.
                 editorId = proj.EditorID;
                 // Return true if: type is Arrow and is not blacklisted OR if the patch_traps option is enabled, type is missile, editor ID contains "trap", and is not blacklisted
-                return (proj.Type == Projectile.TypeEnum.Arrow && !Settings.Blacklist.IsMatch(editorId)) || (Settings.MiscTweaks.PatchTraps && proj.Type == Projectile.TypeEnum.Missile && proj.EditorID.Contains("Trap", StringComparison.OrdinalIgnoreCase) && !Settings.Blacklist.IsMatch(editorId));
+                return ( proj.Type == Projectile.TypeEnum.Arrow && !Settings.Blacklist.IsMatch(editorId)) || ( Settings.MiscTweaks.PatchTraps && proj.Type == Projectile.TypeEnum.Missile && proj.EditorID.Contains("Trap", StringComparison.OrdinalIgnoreCase) && !Settings.Blacklist.IsMatch(editorId) );
             }
             editorId = "";
             return false;
         }
+
 
         private static Lazy<TopLevelSettings> _lazySettings = new();
         private static TopLevelSettings Settings => _lazySettings.Value; // convenience wrapper
@@ -62,26 +82,31 @@ namespace Another_Archery_Patcher
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
             if (Settings.UseVerboseLog) {
-                Console.WriteLine("--- CONFIGURATION ---");
+                Console.WriteLine("\n--- CONFIGURATION ---");
                 Console.WriteLine("Remove Auto-Aim:\t\t" + Settings.GameSettings.DisableAutoaim);
                 Console.WriteLine("Fix Ninja Dodge:\t\t" + Settings.GameSettings.DisableNpcDodge);
                 Console.WriteLine("Remove Supersonic:\t\t" + Settings.MiscTweaks.DisableSupersonic);
-                Console.WriteLine("Patch Trap Projectiles:\t" + Settings.MiscTweaks.PatchTraps);
-                Console.WriteLine("Arrow Tweaks Enabled:\t\t" + Settings.ArrowTweaks.Enabled);
-                Console.WriteLine("Bolt Tweaks Enabled:\t\t" + Settings.BoltTweaks.Enabled);
-                Console.WriteLine("Throwable Tweaks Enabled:\t" + Settings.ThrowableTweaks.Enabled);
-                Console.Write("Blacklist:{ ");
-                foreach (var id in Settings.Blacklist.Matchlist)
-                    Console.Write('\"' + id + "\", ");
-                foreach (var id in Settings.Blacklist.Record)
-                    Console.Write('\"' + id.ToString() + "\", ");
-                Console.Write("}\n");
+                Console.WriteLine("Patch Trap Projectiles:\t\t" + Settings.MiscTweaks.PatchTraps);
+
+                Console.Write("Projectile Tweaks:{");
+                foreach (var tweak in Settings.ProjectileTweaks)
+                    Console.Write('\n' + tweak.GetVarsAsString());
+                Console.WriteLine("}");
+                if (Settings.Blacklist.Enabled)
+                {
+                    Console.Write("Blacklist: {");
+                    foreach (var id in Settings.Blacklist.Matchlist)
+                        Console.Write("\n\t" + id.Name + ( id.Required ? "[!]" : "" ));
+                    foreach (var id in Settings.Blacklist.Record)
+                        Console.Write("\n\t" + id);
+                    Console.WriteLine("\n}");
+                }
             }
 
-            Console.WriteLine("--- BEGIN PATCHER PROCESS ---");
+            Console.WriteLine("\n--- BEGIN PATCHER PROCESS ---");
             var gmstModified = false;
             if ( Settings == null ) throw new Exception("Settings were null! (How did this happen?)"); // throw early if settings are null
-            if (Settings.GameSettings.DisableAutoaim) {
+            if ( Settings.GameSettings.DisableAutoaim ) {
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDegrees", Data = 0.0f });          // Add new game setting to patch: "fAutoAimMaxDegrees"
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDistance", Data = 0.0f });         // Add new game setting to patch: "fAutoAimMaxDistance"
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimScreenPercentage", Data = 0.0f });    // Add new game setting to patch: "fAutoAimScreenPercentage"
@@ -89,45 +114,41 @@ namespace Another_Archery_Patcher
                 Console.WriteLine("Finished removing auto-aim.");
                 gmstModified = true;
             }
-            if (Settings.GameSettings.DisableNpcDodge) {
+            if ( Settings.GameSettings.DisableNpcDodge ) {
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fCombatDodgeChanceMax", Data = 0.0f });       // Add new game setting to patch: "fCombatDodgeChanceMax"
                 Console.WriteLine("Finished patching NPC Ninja Dodge bug.");
                 gmstModified = true;
             }
             var count = 0;
-            foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides())
+            foreach ( var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides() )
             {
                 // iterate through winning projectile overrides (this includes all projectile records added by mods)
                 if (!IsValidPatchTarget(proj, out string id)) continue;
-                // Priority 1 - Bloodcursed Arrows
-                if (Settings.MiscTweaks.BloodcursedId.Contains(id, StringComparer.OrdinalIgnoreCase))
+
+                if ( id.Contains("Trap", StringComparison.OrdinalIgnoreCase) ) // Priority 2 - Trap Projectiles
+                    count += (id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(state, proj, new ProjectileStats(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished Processing Trap: \"" + id + '\"') : HandleProjectileManual(state, proj, new ProjectileStats(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"')) ? 1 : 0;
+                else
                 {
-                    count = Settings.MiscTweaks.DisableGravityBloodcursed ? HandleProjectile(count, state, proj, new ProjectileTweaks(true, Settings.ArrowTweaks.Stats.Speed, 0.0f, Settings.ArrowTweaks.Stats.ImpactForce, Settings.ArrowTweaks.Stats.SoundLevel), "Finished processing bloodcursed arrow: \"" + id + "\" (Disabled Gravity)") : HandleProjectile(count, state, proj, Settings.ArrowTweaks, "Finished processing arrow: \"" + id + '\"');
+                    var allowPartial = true;
+                    foreach (var tweak in Settings.ProjectileTweaks.Where(tweak => tweak.IsPerfectMatch(id)))
+                        allowPartial = !HandleRecord(state, proj, id, tweak, "Finished Processing: " + id);
+                    if (!allowPartial)
+                        ++count;
+                    else
+                        count += Settings.ProjectileTweaks.Where(tweak => tweak.IsMatch(id)).Sum(tweak => HandleRecord(state, proj, id, tweak) ? 1 : 0);
                 }
-                // Priority 2 - Trap Projectiles
-                else if (id.Contains("Trap", StringComparison.OrdinalIgnoreCase))
-                {
-                    // handle ballista trap bolts
-                    count = id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(count, state, proj, new ProjectileStats(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished processing trap: \"" + id + '\"', "Ballista Trap Bolt") : HandleProjectileManual(count, state, proj, new(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"');
-                }
-                // Priority 3 - Throwable Projectiles
-                else if (Settings.ThrowableTweaks.IsMatch(id))
-                    count = HandleProjectile(count, state, proj, Settings.ThrowableTweaks, "Finished processing spear: \"" + id + '\"');
-                // Priority 4 - Arrow Projectiles
-                else if (Settings.ArrowTweaks.IsMatch(id))
-                    count = HandleProjectile(count, state, proj, Settings.ArrowTweaks, "Finished processing arrow: \"" + id + '\"');
-                // Priority 5 - Bolt Projectiles
-                else if (Settings.BoltTweaks.IsMatch(id))
-                    count = HandleProjectile(count, state, proj, Settings.BoltTweaks, "Finished processing bolt: \"" + id + '\"');
-                else if (Settings.UseVerboseLog)
-                    Console.WriteLine("Skipping projectile: \"" + id + '\"');
             }
             Console.WriteLine("--- END PATCHER PROCESS ---");
-            if (Settings.UseVerboseLog) {
-                if (count == 0 && !gmstModified)
+            if (!Settings.UseVerboseLog)
+                return;
+            switch (count)
+            {
+                case 0 when !gmstModified:
                     Console.WriteLine("[WARNING]\tNo records were modified! (Check your settings, is anything enabled?)");
-                else if (count > 0)
+                    break;
+                case > 0:
                     Console.WriteLine("Processed " + count + " records.");
+                    break;
             }
         }
     }
