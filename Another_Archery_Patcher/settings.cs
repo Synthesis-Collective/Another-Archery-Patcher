@@ -138,6 +138,23 @@ namespace Another_Archery_Patcher
         [MaintainOrder]
         [SettingName("Stats")]
         public ProjectileStats Stats; ///< @brief Contains the values to be applied to projectiles in this group.
+
+        public string GetVarsAsString()
+        {
+            string str = "( ";
+            if (Enabled)
+            {
+                str += "Speed:" + Stats.Speed + ", ";
+                str += "Gravity:" + Stats.Gravity + ", ";
+                str += "ImpactForce:" + Stats.ImpactForce + ", ";
+                str += "SoundLevel:" + Stats.SoundLevel;
+                str += "Matchlist:[ ";
+                str += Matchlist.Aggregate(str, (current, match) => current + (match + ", "));
+                str += " ]";
+            }
+            else str += "[Disabled]";
+            return str + " )";
+        }
     }
     /**
      * @class TopLevelSettings
@@ -150,12 +167,13 @@ namespace Another_Archery_Patcher
         public GameSettings GameSettings = new(true, true); ///< @brief Contains toggles for Game Setting changes.
         [SettingName("Universal Projectile Tweaks"), Tooltip("Tweaks that are applied to all projectiles.")]
         public MiscTweaks MiscTweaks = new(true, true, true); ///< @brief Contains toggles for miscellaneous/global tweaks that are applied to all modified records.
-        [SettingName("Arrow Tweaks")]
-        public ProjectileTweaks ArrowTweaks = new(true, 5000.0f, 0.34f, 0.44f, Silent, new List<string> { "Arrow" }); ///< @brief Values that are applied to Arrows.
-        [SettingName("Bolt Tweaks")]
-        public ProjectileTweaks BoltTweaks = new(true, 5800.0f, 0.34f, 0.64f, Normal, new List<string> { "Bolt" }); ///< @brief Values that are applied to Bolts.
-        [SettingName("Throwable Tweaks"), Tooltip("This includes Reikling Spears, and throwing weapons from some other mods.")]
-        public ProjectileTweaks ThrowableTweaks = new(true, 2800.0f, 0.13f, 1.1f, Silent, new List<string> { "Riekling", "SSM", "Throw" }); ///< @brief Values that are applied to throwable weapons, like spears. (In vanilla, this is only applied to the Riekling Spear.)
+        [SettingName("Projectile Tweaks"), Tooltip("Various categories of projectiles to patch.")]
+        public List<ProjectileTweaks> ProjectileTweaks = new()
+        {
+            new ProjectileTweaks(true, 5000.0f, 0.34f, 0.44f, Silent, new List<string> { "Arrow" }), ///< @brief Values that are applied to Arrows.
+            new ProjectileTweaks(true, 5800.0f, 0.34f, 0.64f, Normal, new List<string> { "Bolt" }), ///< @brief Values that are applied to Bolts.
+            new ProjectileTweaks(true, 2800.0f, 0.13f, 1.1f, Silent, new List<string> { "Riekling", "SSM", "Throw" }) ///< @brief Values that are applied to throwable weapons, like spears. (In vanilla, this is only applied to the Riekling Spear.)
+        };
         [SettingName("Blacklist"), Tooltip("Any projectiles specified here will not be modified.")]
         public MatchableRecord Blacklist = new(new List<string> { "MQ101ArrowSteelProjectile" }, new List<IFormLinkGetter<IProjectileGetter>>()); ///< @brief Used to ignore certain projectiles used in quests / other projectiles that are sensitive to modification.
         [SettingName("Verbose Log"), JsonDiskName("verbose-log"), Tooltip("Writes additional information to the log, useful for debugging.")]
