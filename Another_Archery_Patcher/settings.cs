@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mutagen.Bethesda.Plugins;
@@ -55,108 +54,6 @@ namespace Another_Archery_Patcher
         public bool PatchTraps;
     }
 
-    public class MatchableElement
-    {
-        protected bool Equals(MatchableElement other)
-        {
-            return Name == other.Name && Required == other.Required;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((MatchableElement)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Required);
-        }
-
-        public MatchableElement(string name, bool required = false)
-        {
-            Name = name;
-            Required = required;
-        }
-        [MaintainOrder]
-        [Tooltip("This is the string to search for in each Projectile's Editor ID (Or Form ID)")]
-        public string Name;
-        [Tooltip("When true, a projectile is required to match this entry to be considered part of this category, even if it matches other non-required entries too.")]
-        public bool Required;
-
-        public bool IsMatch(string? id)
-        {
-            if (id == null) return false;
-            return Name == id || id.Contains(Name, StringComparison.OrdinalIgnoreCase) || Name.Contains(id, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public static bool operator ==(MatchableElement elem, string comp)
-        {
-            return elem.Name == comp;
-        }
-        public static bool operator !=(MatchableElement elem, string comp)
-        {
-            return elem.Name == comp;
-        }
-    }
-    /**
-     * @class Matchable
-     * @brief Base class that allows disabling itself, and exposes a list of strings used for matching records against it.
-     */
-    public class Matchable
-    {
-        public Matchable(List<MatchableElement>? matchlist)
-        {
-            Matchlist = matchlist ?? new List<MatchableElement>();
-        }
-
-        private bool ContainsRequired(string? id)
-        {
-            return id != null && Matchlist.All(elem => !elem.Required || elem.Required && elem.IsMatch(id));
-        }
-        private bool Contains(string? id)
-        {
-            return id != null && Matchlist.Any(elem => elem.IsMatch(id)) && ContainsRequired(id);
-        }
-        /**
-         * @brief Checks if the given Editor ID or Form ID is a case-insensitive match for any of the strings in the matchlist.
-         */
-        public bool IsMatch(string? id)
-        {
-            if (id == null || Matchlist.Count <= 0) return false;
-            return Contains(id);
-        }
-        [MaintainOrder]
-        [SettingName("Common Names"), JsonDiskName("matchlist"), Tooltip("(Don't change this unless you know what you're doing!) Used to resolve projectile type, as there is no other way to distinguish between arrows/bolts/other")]
-        public List<MatchableElement> Matchlist;
-    }
-    /**
-     * @class MatchableRecord
-     * @brief Represents a list of Records that are used for the record blacklisting feature.
-     */
-    public class MatchableBlacklist : Matchable
-    {
-        /**
-         * @brief Default constructor that takes a list of blacklisted IDs & list of blacklisted Record FormLinks
-         */
-        public MatchableBlacklist(bool enabled, List<MatchableElement> blacklistedIDs, List<IFormLinkGetter<IProjectileGetter>> blacklistedRecords) : base(blacklistedIDs)
-        {
-            Enabled = enabled;
-            Record = blacklistedRecords;
-        }
-
-        [MaintainOrder]
-        [Tooltip("Disabling this will disable this blacklist.")]
-        public bool Enabled;
-        [SettingName("Records")]
-        public List<IFormLinkGetter<IProjectileGetter>> Record;
-    }
     /**
      * @class ProjectileStats
      * @brief Contains common DATA stats for PROJ records.
@@ -204,20 +101,18 @@ namespace Another_Archery_Patcher
 
         public string GetMatchlistAsString()
         {
-            return Matchlist.Aggregate("", (current, match) => current + (match.ToString() + ", "));
+            return Matchlist.Aggregate("Matchlist:[", (current, match) => current + (' ' + match.Name + (match.Required ? "[!] " : " "))) + " ]";
         }
 
         public string GetVarsAsString()
         {
-            string str = "( ";
-            str += "Speed:" + Stats.Speed + ", ";
-            str += "Gravity:" + Stats.Gravity + ", ";
-            str += "ImpactForce:" + Stats.ImpactForce + ", ";
-            str += "SoundLevel:" + Stats.SoundLevel + ", ";
-            str += "Matchlist:[ ";
-            str += Matchlist.Aggregate(str, (current, match) => current + (match.ToString() + ", "));
-            str += " ]";
-            return str + " )";
+            string str = "";
+            str += "\t" + GetMatchlistAsString() + '\n';
+            str += "\tSpeed:" + Stats.Speed + '\n';
+            str += "\tGravity:" + Stats.Gravity + '\n';
+            str += "\tImpactForce:" + Stats.ImpactForce + '\n';
+            str += "\tSoundLevel:" + Stats.SoundLevel + '\n';
+            return str;
         }
     }
     /**
@@ -231,12 +126,12 @@ namespace Another_Archery_Patcher
         public GameSettings GameSettings = new(true, true); ///< @brief Contains toggles for Game Setting changes.
         [SettingName("Universal Projectile Tweaks"), Tooltip("Tweaks that are applied to all projectiles.")]
         public MiscTweaks MiscTweaks = new(true, true, true); ///< @brief Contains toggles for miscellaneous/global tweaks that are applied to all modified records.
-        [SettingName("Projectile Tweaks"), Tooltip("Various categories of projectiles to patch.")]
+        [SettingName("Projectile Categories & Values"), Tooltip("Various categories of projectiles to patch.")]
         public List<ProjectileTweaks> ProjectileTweaks = new()
         {
             new ProjectileTweaks(5000.0f, 0.34f, 0.44f, Silent, new List<MatchableElement> { new("Arrow") }), ///< @brief Values that are applied to Arrows.
             new ProjectileTweaks(5800.0f, 0.34f, 0.64f, Normal, new List<MatchableElement> { new("Bolt") }), ///< @brief Values that are applied to Bolts.
-            new ProjectileTweaks(2800.0f, 0.13f, 1.1f, Silent, new List<MatchableElement> { new("Riekling"), new("SSM"), new("Throw") }) ///< @brief Values that are applied to throwable weapons, like spears. (In vanilla, this is only applied to the Riekling Spear.)
+            new ProjectileTweaks(2800.0f, 0.13f, 1.1f, Silent, new List<MatchableElement> { new("Riekling", false), new("SSM", false), new("Throw", false) }) ///< @brief Values that are applied to throwable weapons, like spears. (In vanilla, this is only applied to the Riekling Spear.)
         };
         [SettingName("Blacklist"), Tooltip("Any projectiles specified here will not be modified.")]
         public MatchableBlacklist Blacklist = new(true, new List<MatchableElement> { new("MQ101ArrowSteelProjectile") }, new List<IFormLinkGetter<IProjectileGetter>>()); ///< @brief Used to ignore certain projectiles used in quests / other projectiles that are sensitive to modification.

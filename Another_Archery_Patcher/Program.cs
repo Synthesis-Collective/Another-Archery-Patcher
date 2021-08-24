@@ -45,6 +45,17 @@ namespace Another_Archery_Patcher
             }
             return true;
         }
+        private static bool HandleRecord(IPatcherState<ISkyrimMod, ISkyrimModGetter> state, IProjectileGetter proj, string id, ProjectileTweaks tweak, string log_message = "")
+        {
+
+            if (Settings.MiscTweaks.DisableGravityBloodcursed && Settings.MiscTweaks.BloodcursedId.Contains(id, StringComparer.OrdinalIgnoreCase))
+            {
+                return HandleProjectileManual(state, proj,
+                    new ProjectileStats(tweak.Stats.Speed, 0.0f, tweak.Stats.ImpactForce,
+                        tweak.Stats.SoundLevel), "Finished Processing Bloodcursed arrow: \"" + id + "\"");
+            }
+            return HandleProjectile(state, proj, tweak, "Finished Processing: \"" + id + "\"");
+        }
         private static bool IsValidPatchTarget(IProjectileGetter proj, out string editorId)
         {
             if (proj.EditorID != null) { // Editor ID is valid, check if projectile type is valid & projectile isn't present on any blacklist.
@@ -55,6 +66,7 @@ namespace Another_Archery_Patcher
             editorId = "";
             return false;
         }
+
 
         private static Lazy<TopLevelSettings> _lazySettings = new();
         private static TopLevelSettings Settings => _lazySettings.Value; // convenience wrapper
@@ -70,28 +82,28 @@ namespace Another_Archery_Patcher
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
             if (Settings.UseVerboseLog) {
-                Console.WriteLine("--- CONFIGURATION ---");
+                Console.WriteLine("\n--- CONFIGURATION ---");
                 Console.WriteLine("Remove Auto-Aim:\t\t" + Settings.GameSettings.DisableAutoaim);
                 Console.WriteLine("Fix Ninja Dodge:\t\t" + Settings.GameSettings.DisableNpcDodge);
                 Console.WriteLine("Remove Supersonic:\t\t" + Settings.MiscTweaks.DisableSupersonic);
-                Console.WriteLine("Patch Trap Projectiles:\t" + Settings.MiscTweaks.PatchTraps);
+                Console.WriteLine("Patch Trap Projectiles:\t\t" + Settings.MiscTweaks.PatchTraps);
 
-                Console.WriteLine("Projectile Tweaks:{\n\t");
+                Console.Write("Projectile Tweaks:{");
                 foreach (var tweak in Settings.ProjectileTweaks)
-                    Console.Write(tweak.GetVarsAsString());
-                Console.WriteLine("}\n");
+                    Console.Write('\n' + tweak.GetVarsAsString());
+                Console.WriteLine("}");
                 if (Settings.Blacklist.Enabled)
                 {
-                    Console.Write("Blacklist is Enabled\n{\n\t");
+                    Console.Write("Blacklist: {");
                     foreach (var id in Settings.Blacklist.Matchlist)
-                        Console.Write('\"' + id.Name + ( id.Required ? "(Required)" : "" ) + "\", ");
+                        Console.Write("\n\t" + id.Name + ( id.Required ? "[!]" : "" ));
                     foreach (var id in Settings.Blacklist.Record)
-                        Console.Write('\"' + id.ToString() + "\", ");
-                    Console.Write("\n}\n");
+                        Console.Write("\n\t" + id);
+                    Console.WriteLine("\n}");
                 }
             }
 
-            Console.WriteLine("--- BEGIN PATCHER PROCESS ---");
+            Console.WriteLine("\n--- BEGIN PATCHER PROCESS ---");
             var gmstModified = false;
             if ( Settings == null ) throw new Exception("Settings were null! (How did this happen?)"); // throw early if settings are null
             if ( Settings.GameSettings.DisableAutoaim ) {
@@ -114,32 +126,29 @@ namespace Another_Archery_Patcher
                 if (!IsValidPatchTarget(proj, out string id)) continue;
 
                 if ( id.Contains("Trap", StringComparison.OrdinalIgnoreCase) ) // Priority 2 - Trap Projectiles
-                    count += (id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(state, proj, new ProjectileStats(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished processing trap: \"" + id + '\"', "Ballista Trap Bolt") : HandleProjectileManual(state, proj, new ProjectileStats(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"')) ? 1 : 0;
+                    count += (id.Contains("TrapDweBallista", StringComparison.OrdinalIgnoreCase) ? HandleProjectileManual(state, proj, new ProjectileStats(6400.0f, 0.69f, 75.0f, SoundLevel.VeryLoud), "Finished Processing Trap: \"" + id + '\"') : HandleProjectileManual(state, proj, new ProjectileStats(3000.0f, 0.0f, 0.2f, SoundLevel.Normal), "Finished processing trap: \"" + id + '\"')) ? 1 : 0;
                 else
                 {
-                    foreach (var tweak in Settings.ProjectileTweaks.Where(tweak => tweak.IsMatch(id)))
-                    {
-                        if (Settings.MiscTweaks.DisableGravityBloodcursed &&
-                            Settings.MiscTweaks.BloodcursedId.Contains(id,
-                                StringComparer.OrdinalIgnoreCase)) // Priority 1 - Bloodcursed Arrows
-                            count += HandleProjectileManual(state, proj,
-                                new ProjectileStats(tweak.Stats.Speed, 0.0f, tweak.Stats.ImpactForce,
-                                    tweak.Stats.SoundLevel), "Finished processing Bloodcursed arrow: \"" + id + "\"")
-                                ? 1
-                                : 0;
-                        else
-                            count += HandleProjectile(state, proj, tweak, "Finished Processing: \"" + id + "\"")
-                                ? 1
-                                : 0;
-                    }
+                    var allowPartial = true;
+                    foreach (var tweak in Settings.ProjectileTweaks.Where(tweak => tweak.IsPerfectMatch(id)))
+                        allowPartial = !HandleRecord(state, proj, id, tweak, "Finished Processing: " + id);
+                    if (!allowPartial)
+                        ++count;
+                    else
+                        count += Settings.ProjectileTweaks.Where(tweak => tweak.IsMatch(id)).Sum(tweak => HandleRecord(state, proj, id, tweak) ? 1 : 0);
                 }
             }
             Console.WriteLine("--- END PATCHER PROCESS ---");
-            if ( Settings.UseVerboseLog ) {
-                if (count == 0 && !gmstModified)
+            if (!Settings.UseVerboseLog)
+                return;
+            switch (count)
+            {
+                case 0 when !gmstModified:
                     Console.WriteLine("[WARNING]\tNo records were modified! (Check your settings, is anything enabled?)");
-                else if (count > 0)
+                    break;
+                case > 0:
                     Console.WriteLine("Processed " + count + " records.");
+                    break;
             }
         }
     }
