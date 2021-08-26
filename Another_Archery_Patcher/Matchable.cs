@@ -30,15 +30,6 @@ namespace Another_Archery_Patcher
             return id == Name || id.Contains(Name, StringComparison.OrdinalIgnoreCase);
         }
 
-        public static bool operator ==(MatchableElement elem, string comp)
-        {
-            return elem.Name == comp;
-        }
-        public static bool operator !=(MatchableElement elem, string comp)
-        {
-            return elem.Name == comp;
-        }
-
         public override string ToString()
         {
             return Name;
