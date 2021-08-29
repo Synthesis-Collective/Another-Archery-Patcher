@@ -102,7 +102,7 @@ namespace Another_Archery_Patcher
             var id = proj.EditorID;
             if (id != null) { // Editor ID is valid, check if projectile type is valid & projectile isn't present on any blacklist.
                 // Return true if: type is Arrow and is not blacklisted OR if the patch_traps option is enabled, type is missile, editor ID contains "trap", and is not blacklisted
-                return !Settings.IsBlacklisted(proj) && proj.Type == Projectile.TypeEnum.Arrow || ( Settings.MiscTweaks.PatchTraps && proj.Type == Projectile.TypeEnum.Missile && id.Contains("Trap", StringComparison.OrdinalIgnoreCase) );
+                return (!Settings.IsBlacklisted(proj) && (proj.Type == Projectile.TypeEnum.Arrow)) || ( Settings.MiscTweaks.PatchTraps && (proj.Type == Projectile.TypeEnum.Missile) && id.Contains("Trap", StringComparison.OrdinalIgnoreCase) );
             }
             return false;
         }
