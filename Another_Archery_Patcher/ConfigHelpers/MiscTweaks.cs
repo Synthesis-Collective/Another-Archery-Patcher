@@ -26,5 +26,4 @@ namespace Another_Archery_Patcher.ConfigHelpers
         [SettingName("(Experimental) Flag all as No-Auto-Aim")] 
         public bool FlagAllDisableCombatAutoAim;
     }
-
 }
