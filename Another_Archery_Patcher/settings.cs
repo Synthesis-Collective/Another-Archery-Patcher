@@ -76,6 +76,10 @@ namespace Another_Archery_Patcher
                 FlagEditor.AddFlag(proj, Projectile.Flag.DisableCombatAimCorrection, out var countFlagChanges);
                 countChanges += countFlagChanges;
             }
+            if (FunTweaks.Enabled) {
+                FunTweaks.ApplyTweaks(proj, out var countFlagChanges);
+                countChanges += countFlagChanges;
+            }
             return proj;
         }
     }
