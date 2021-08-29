@@ -30,14 +30,14 @@ namespace Another_Archery_Patcher
         [SettingName("Game Settings")]
         public GameSettings GameSettings = new(true, true);
         [SettingName("General Tweaks")]
-        public MiscTweaks MiscTweaks = new(true, true, true);
+        public MiscTweaks MiscTweaks = new(true, true, true, false);
         [Tooltip("Any projectiles listed here will not be patched.")]
         public List<FormLinkGetter<IProjectileGetter>> Blacklist = new()
         {
             Skyrim.Projectile.MQ101ArrowSteelProjectile,
         };
         [SettingName("Fun Tweaks"), Tooltip("Not meant for serious gameplay.")]
-        public FunTweaks FunTweaks = new(true, true, true);
+        public FunTweaks FunTweaks = new(false, false, false, false);
         [SettingName("Verbose Logging"), JsonDiskName("verbose-log"), Tooltip("Prints additional information to the console.")]
         public bool UseVerboseLog = true;
         
@@ -72,7 +72,7 @@ namespace Another_Archery_Patcher
                 FlagEditor.RemoveFlag(proj, Projectile.Flag.Supersonic, out var countFlagChanges);
                 countChanges += countFlagChanges;
             }
-            if (GameSettings.DisableAutoaim) {
+            if (MiscTweaks.FlagAllDisableCombatAutoAim) {
                 FlagEditor.AddFlag(proj, Projectile.Flag.DisableCombatAimCorrection, out var countFlagChanges);
                 countChanges += countFlagChanges;
             }

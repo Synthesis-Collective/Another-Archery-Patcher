@@ -7,14 +7,16 @@ namespace Another_Archery_Patcher.ConfigHelpers
 
 
     public class FunTweaks {
-        public FunTweaks(bool enabled, bool? explode = null, bool? pinLimbs = null)
+        public FunTweaks(bool enabled, bool? hitscan = null, bool? explode = null, bool? pinLimbs = null)
         {
             Enabled = enabled;
+            FlagAllHitscan = hitscan ?? false;
             FlagAllExplosive = explode ?? false;
             FlagAllPinLimbs = pinLimbs ?? false;
         }
 
         [MaintainOrder]
+        [Tooltip("Unchecking this box will disable all tweaks in this section.")]
         public bool Enabled;
         [SettingName("Hitscan"), Tooltip("Makes all projectiles use hitscan.")]
         public bool FlagAllHitscan;

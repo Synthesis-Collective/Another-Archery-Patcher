@@ -8,11 +8,12 @@ namespace Another_Archery_Patcher.ConfigHelpers
      */
     public class MiscTweaks
     {
-        public MiscTweaks(bool disableSupersonicFlag, bool removeBloodcursedGravity, bool patchTraps)
+        public MiscTweaks(bool disableSupersonicFlag, bool removeBloodcursedGravity, bool patchTraps, bool disableCombatAutoAim)
         {
             DisableSupersonic = disableSupersonicFlag;
             DisableGravityBloodcursed = removeBloodcursedGravity;
             PatchTraps = patchTraps;
+            FlagAllDisableCombatAutoAim = disableCombatAutoAim;
         }
 
         [MaintainOrder]
@@ -22,6 +23,8 @@ namespace Another_Archery_Patcher.ConfigHelpers
         public bool DisableGravityBloodcursed;
         [SettingName("Patch Trap Projectiles"), Tooltip("Modifies most of the projectiles fired by dart traps & dwemer ballista traps to be more interesting. (If anyone wants to customize the values, let me know and I'll add it)")]
         public bool PatchTraps;
+        [SettingName("(Experimental) Flag all as No-Auto-Aim")] 
+        public bool FlagAllDisableCombatAutoAim;
     }
 
 }
