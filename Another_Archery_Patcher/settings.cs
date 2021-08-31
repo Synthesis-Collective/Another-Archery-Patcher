@@ -28,7 +28,7 @@ namespace Another_Archery_Patcher
         }
         
         [SettingName("Game Settings")]
-        public GameSettings GameSettings = new(true, true);
+        public GameSettings GameSettings = new(true, true, 8, 1F, 33);
         [SettingName("General Tweaks")]
         public MiscTweaks MiscTweaks = new(true, true, true, false);
         [Tooltip("Any projectiles listed here will not be patched.")]
@@ -38,8 +38,6 @@ namespace Another_Archery_Patcher
         };
         [SettingName("Fun Tweaks"), Tooltip("Not meant for serious gameplay.")]
         public FunTweaks FunTweaks = new(false, false, false, false);
-        [SettingName("Verbose Logging"), JsonDiskName("verbose-log"), Tooltip("Prints additional information to the console.")]
-        public bool UseVerboseLog = true;
         
         // Check if a given projectile is on the blacklist
         public bool IsBlacklisted(IProjectileGetter proj)

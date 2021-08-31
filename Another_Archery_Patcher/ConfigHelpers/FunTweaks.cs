@@ -24,6 +24,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
         public bool FlagAllExplosive;
         [SettingName("Pin Limbs"), Tooltip("Makes all projectiles pin limbs.")]
         public bool FlagAllPinLimbs;
+        
 
         public Projectile ApplyTweaks(Projectile proj, out uint countModified)
         {
