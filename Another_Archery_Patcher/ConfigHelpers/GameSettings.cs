@@ -1,4 +1,3 @@
-using Mutagen.Bethesda;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Synthesis;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
@@ -23,13 +22,13 @@ namespace Another_Archery_Patcher.ConfigHelpers
         [MaintainOrder]
         [SettingName("Disable Auto-Aim"), Tooltip("Removes the terrible vanilla auto-aim from 1st and 3rd person.")]
         public bool DisableAutoaim; ///< @brief Toggles disabling auto-aim.
-        [SettingName("Patch NPC Ninja Dodge Bug"), Tooltip("Prevents NPCs from dodging your arrows at range.")]
+        [SettingName("Fix Ninja-Dodge"), Tooltip("Prevents NPCs from dodging your arrows at range.")]
         public bool DisableNpcDodge; ///< @brief Toggles disabling NPC dodge to fix npc ninja dodge.
-        [SettingName("Max Attached Arrows"), Tooltip("(Min 0, Default: 3) Max number of projectiles stuck into an actor before some start disappearing.")]
+        [SettingName("Max Attached Arrows"), Tooltip("Max number of projectiles stuck into an actor before some start disappearing. (Min 0, Default: 3)")]
         public int MaxAttachedArrows;
-        [SettingName("Fully Drawn Speed Mult"), Tooltip("(Default: 1) This is the multiplier applied to arrows shot from a fully drawn bow.")]
+        [SettingName("Fully Drawn Speed Mult"), Tooltip("This is the multiplier applied to arrows shot from a fully drawn bow. (Default: 1)")]
         public float FullDrawArrowSpeedMult;
-        [SettingName("Recovery Chance"), Tooltip("(Min 0, Default: 33, Max 100) chance that a projectile will be recoverable when shot into an NPC.")]
+        [SettingName("Recovery Chance"), Tooltip("Chance that a projectile will be recoverable after being shot into an actor. (Min 0, Default: 33, Max 100)")]
         public int ArrowRecoveryChance;
 
         public void AddGameSettingsToPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
