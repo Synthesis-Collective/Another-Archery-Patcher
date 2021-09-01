@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Another_Archery_Patcher.ConfigHelpers;
@@ -5,80 +6,78 @@ using Mutagen.Bethesda.FormKeys.SkyrimSE;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
-using SoundLevel = Another_Archery_Patcher.ConfigHelpers.SoundLevel;
 
 namespace Another_Archery_Patcher
 {
-    public class Settings : StatsDefault
+    using static Flag.Type;
+    using static Flag.State;
+    
+    public class Settings : StatsPreset
     {
-        public Settings() // Default Constructor
-        {
-            // If disable gravity for bloodcursed arrows is enabled, add a new category to override arrows
-            if (MiscTweaks.DisableGravityBloodcursed)
-                ProjectileTweaks.Add(
-                    new Stats("Bloodcursed Arrows", 
-                        2, 
-                        5000.0f, 
-                        0f, 
-                        0.44f, 
-                        SoundLevel.Silent,
-                        new List<string> { "DCL1ArrowElvenBloodProjectile", "DLC1AurielsBloodDippedProjectile" }
-                    )
-                );
-        }
+        [MaintainOrder]
+        [SettingName("Global Flag Tweaks")] // FLAG TWEAKS
+        public List<FlagTweak> GlobalFlagTweaks = new() {
+            new FlagTweak(Supersonic, Remove),
+            new FlagTweak(DisableCombatAimCorrection, Add)
+        };
         
-        [SettingName("Game Settings")]
+        [SettingName("Game Settings"), Tooltip("Change the value of archery-related game settings.")] // GAME SETTINGS
         public GameSettings GameSettings = new(true, true, 8, 1F, 33);
-        [SettingName("General Tweaks")]
-        public MiscTweaks MiscTweaks = new(true, true, true, false);
-        [Tooltip("Any projectiles listed here will not be patched.")]
-        public List<FormLinkGetter<IProjectileGetter>> Blacklist = new()
-        {
+        
+        [Tooltip("Any projectiles listed here will not be added or modified.")] // BLACKLIST
+        public List<FormLinkGetter<IProjectileGetter>> Blacklist = new() {
             Skyrim.Projectile.MQ101ArrowSteelProjectile,
         };
-        [SettingName("Fun Tweaks"), Tooltip("Not meant for serious gameplay.")]
-        public FunTweaks FunTweaks = new(false, false, false, false);
         
-        // Check if a given projectile is on the blacklist
-        public bool IsBlacklisted(IProjectileGetter proj)
+        private static readonly Dictionary<Projectile.TypeEnum, (bool, List<string>?)> ProjectileTypeWhitelist = new() {
+            { Projectile.TypeEnum.Arrow, (true, null) },
+            { Projectile.TypeEnum.Missile, (true, new List<string>{ "Trap" }) }
+        };
+
+        // FUNCTIONS
+        
+        // Check if a given formkey is on the blacklist
+        private bool IsBlacklisted(FormKey projFormKey)
         {
-            return Blacklist.Any(blacklisted => blacklisted.FormKey == proj.FormKey);
+            return Blacklist.Any(blacklisted => blacklisted.FormKey == projFormKey);
+        }
+
+        // Check if a given projectile is a valid target for the patcher
+        public bool IsValidPatchTarget(IProjectileGetter projGetter)
+        {
+            if (projGetter.EditorID == null) 
+                return false;
+            foreach (var (_, (allow, matchlist)) in ProjectileTypeWhitelist.Where(proj => proj.Key == projGetter.Type))
+                if (matchlist == null || matchlist.Any(str => projGetter.EditorID.Contains(str, StringComparison.OrdinalIgnoreCase))) 
+                    return allow && !IsBlacklisted(projGetter.FormKey);
+            return false;
         }
         
         // Apply the highest priority stats to a given projectile, if it isn't blacklisted and a valid category was found
-        public Projectile ApplyHighestPriorityStats(Projectile proj, out uint countChanges, out string identifier)
+        public (Projectile, uint, string) ApplyHighestPriorityStats(Projectile proj)
         {
-            identifier = "";
-            countChanges = 0u;
             var stats = GetHighestPriorityStats(proj);
-            if (stats == null) return proj; // return unmodified projectile if no stats object was received
-            identifier = stats.Identifier;
+            var countChanges = 0u;
+            var identifier = stats!.Identifier;
             // Speed
-            proj.Speed = stats.GetSpeed(proj.Speed, out var changedSpeed);
-            countChanges += changedSpeed ? 1u : 0u;
+            proj.Speed = stats.GetSpeed(proj.Speed, out var changed);
+            countChanges += changed ? 1u : 0u;
             // Gravity
-            proj.Gravity = stats.GetGravity(proj.Gravity, out var changedGravity);
-            countChanges += changedGravity ? 1u : 0u;
+            proj.Gravity = stats.GetGravity(proj.Gravity, out changed);
+            countChanges += changed ? 1u : 0u;
             // Impact Force
-            proj.ImpactForce = stats.GetImpactForce(proj.ImpactForce, out var changedImpactForce);
-            countChanges += changedImpactForce ? 1u : 0u;
+            proj.ImpactForce = stats.GetImpactForce(proj.ImpactForce, out changed);
+            countChanges += changed ? 1u : 0u;
             // Sound Level
-            proj.SoundLevel = stats.GetSoundLevel(proj.SoundLevel, out var changedSoundLevel);
-            countChanges += changedSoundLevel ? 1u : 0u;
+            proj.SoundLevel = stats.GetSoundLevel(proj.SoundLevel, out changed);
+            countChanges += changed ? 1u : 0u;
             // Flags
-            if (MiscTweaks.DisableSupersonic) {
-                FlagEditor.RemoveFlag(proj, Projectile.Flag.Supersonic, out var countFlagChanges);
-                countChanges += countFlagChanges;
-            }
-            if (MiscTweaks.FlagAllDisableCombatAutoAim) {
-                FlagEditor.AddFlag(proj, Projectile.Flag.DisableCombatAimCorrection, out var countFlagChanges);
-                countChanges += countFlagChanges;
-            }
-            if (FunTweaks.Enabled) {
-                FunTweaks.ApplyTweaks(proj, out var countFlagChanges);
-                countChanges += countFlagChanges;
-            }
-            return proj;
+            uint countFlagChanges;
+            (proj, countFlagChanges) = Flag.Editor.ApplyFlags(proj, GlobalFlagTweaks); // apply global flags
+            countChanges += countFlagChanges;
+            (proj, countFlagChanges) = Flag.Editor.ApplyFlags(proj, stats.Flags); // apply specific flags
+            countChanges += countFlagChanges;
+            return (proj, countChanges, identifier);
         }
     }
 }

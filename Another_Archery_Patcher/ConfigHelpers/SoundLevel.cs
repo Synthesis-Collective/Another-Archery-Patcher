@@ -2,7 +2,7 @@ using Mutagen.Bethesda.WPF.Reflection.Attributes;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
-    public enum SoundLevel ///< @brief this is needed because reflective settings don't work with Mutagen.Bethesda.Skyrim.SoundLevel for some reason
+    public enum SoundLevel : uint ///< @brief this is needed because reflective settings don't work with Mutagen.Bethesda.Skyrim.SoundLevel for some reason
     {
         [MaintainOrder]
         Silent = 2,
