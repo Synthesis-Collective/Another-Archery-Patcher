@@ -1,10 +1,12 @@
-using System;
 using System.Collections.Generic;
 using Mutagen.Bethesda.Skyrim;
-using Noggog;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
+    /**
+     * @struct Flag
+     * @brief Contains methods
+     */
     public struct Flag
     {
         public enum State : uint
@@ -27,29 +29,6 @@ namespace Another_Archery_Patcher.ConfigHelpers
             PassThroughSmallTransparent = 512, // 0x00000200
             DisableCombatAimCorrection = 1024, // 0x00000400
             Rotation = 32768, // 0x00008000
-        }
-
-        public static Type CollapseFlagTypes(List<FlagTweak> flags)
-        {
-            if (!flags.Any())
-                throw new Exception("Attempted to collapse 0 flags!");
-            
-            Type ret = new();
-
-            foreach (var (flag, state) in flags) {
-                switch (state) {
-                    case State.Add:
-                        ret |= flag;
-                        break;
-                    case State.Remove:
-                        ret &= flag;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(flag.ToString(), "\nDelete your settings.json file and restart Synthesis!\n");
-                }
-            }
-            
-            return ret;
         }
         
         public struct Editor {

@@ -1,5 +1,4 @@
-using System.Collections;
-using Mutagen.Bethesda.Skyrim;
+using Mutagen.Bethesda.WPF.Reflection.Attributes;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
@@ -7,6 +6,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
      * @class FlagTweak
      * @brief Contains a projectile flag, and a FlagState. This is used instead of a Dictionary because I don't like how Dictionaries look in the settings menu.
      */
+    [ObjectNameMember(nameof(Flag))]
     public class FlagTweak
     {
         public FlagTweak(Flag.Type flag, Flag.State state)
