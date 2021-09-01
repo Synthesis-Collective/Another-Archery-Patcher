@@ -6,6 +6,8 @@ using Mutagen.Bethesda.WPF.Reflection.Attributes;
 namespace Another_Archery_Patcher.ConfigHelpers
 {
     using static SoundLevel;
+    using static Flag.Type;
+    using static Flag.State;
     public class StatsPreset
     {
         [MaintainOrder]
@@ -65,7 +67,8 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 0.07f,
                 0.2f, 
                 Normal, 
-                new List<string>{ "TrapDart" }
+                new List<string>{ "TrapDart" },
+                new List<FlagTweak>(){ new (DisableCombatAimCorrection, Remove) }
             ),
             new Stats("Ballista Traps",
                 3, 
@@ -73,7 +76,8 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 0.69f, 
                 75.0f, 
                 VeryLoud, 
-                new List<string>{ "TrapDweBallista" }
+                new List<string>{ "TrapDweBallista" },
+                new List<FlagTweak>(){ new (DisableCombatAimCorrection, Remove) }
             )
         };
 
