@@ -49,7 +49,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
 
         public float GetGravity(float current, out bool modified)
         {
-            return ResolveValue(Speed, current, out modified);
+            return ResolveValue(Gravity, current, out modified);
         }
         
         public float GetImpactForce(float current, out bool modified)
