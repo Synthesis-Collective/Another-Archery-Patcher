@@ -6,11 +6,11 @@ using Mutagen.Bethesda.WPF.Reflection.Attributes;
 namespace Another_Archery_Patcher.ConfigHelpers
 {
     using static SoundLevel;
-    public class StatsDefault
+    public class StatsPreset
     {
         [MaintainOrder]
-        [Tooltip("Change Projectile Stats Per-Category.")]
-        public List<Stats> ProjectileTweaks = new()
+        [SettingName("Projectile Categories"), Tooltip("Change Projectile Stats Per-Category.")]
+        public List<Stats> ProjectileCategories = new()
         {
             new Stats("Default",
                 0,
@@ -24,8 +24,16 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 5000.0f, 
                 0.34f, 
                 0.44f, 
-                Silent, 
+                Silent,
                 new List<string>{ "Arrow" }
+            ),
+            new Stats("Bloodcursed Arrows", 
+                2, 
+                5000.0f, 
+                0f, 
+                0.44f, 
+                Silent,
+                new List<string> { "DCL1ArrowElvenBloodProjectile", "DLC1AurielsBloodDippedProjectile" }
             ),
             new Stats("Bolts",
                 1, 
@@ -76,7 +84,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 throw new Exception("Attempted to get stats for null projectile!");
             Stats? highestStats = null;
             var highestPriority = -1;
-            foreach (var match in ProjectileTweaks)
+            foreach (var match in ProjectileCategories)
             {
                 var matchPriority = match.GetPriority(id);
                 if (highestStats != null && matchPriority <= highestPriority) continue;
