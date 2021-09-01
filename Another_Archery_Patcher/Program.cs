@@ -8,7 +8,7 @@ namespace Another_Archery_Patcher
 {
     public class Program
     {
-        private static Lazy<Settings> _lazySettings = new();
+        private static Lazy<Settings> _lazySettings = null!;
         private static Settings Settings => _lazySettings.Value; // convenience wrapper
 
         public static async Task<int> Main(string[] args)
@@ -22,7 +22,7 @@ namespace Another_Archery_Patcher
 
         public static void RunPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
-            Console.WriteLine("\n--- BEGIN PATCHER PROCESS ---"); // begin
+            Console.WriteLine("\n--- PATCHER STARTING ---"); // begin
 
             // Handle Game Settings
             Settings.GameSettings.AddGameSettingsToPatch(state);
@@ -30,40 +30,21 @@ namespace Another_Archery_Patcher
             // Handle Projectiles
             var count = 0;
             foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) {
-                if (!IsValidPatchTarget(proj)) continue;
-                Console.WriteLine("Processing projectile: " + proj.EditorID);
-                Settings.ApplyHighestPriorityStats(state.PatchMod.Projectiles.GetOrAddAsOverride(proj), out var changedValues, out var appliedCategoryIdentifier);
-                if (changedValues > 0) {
-                    ++count;
-                    Console.WriteLine("\tApplied " + changedValues + " values from category \"" + appliedCategoryIdentifier + '\"');
+                if (!Settings.IsValidPatchTarget(proj)) continue;
+                Console.Write("Processing projectile: \"" + proj.EditorID + '\"');
+                var countChanges = 0u;
+                string appliedIdentifier = "[NONE]";
+                try {
+                    (_, countChanges, appliedIdentifier) = Settings.ApplyHighestPriorityStats(state.PatchMod.Projectiles.GetOrAddAsOverride(proj));
                 }
-                else
-                    Console.WriteLine("\tDidn't apply anything from category \"" + appliedCategoryIdentifier + '\"');
-
-                Console.WriteLine("");
+                finally {
+                    Console.WriteLine(" using category: \"" + appliedIdentifier + '\"');
+                    Console.WriteLine("\tChanged " + countChanges + " values.");
+                    count += countChanges > 0 ? 1 : 0;
+                }
             }
-
-
-            Console.WriteLine("--- END PATCHER PROCESS ---\nProcessed " + count + " projectile records successfully.\n"); // end
-        }
-
-        /**
-         * @brief Checks if a given projectile is not on any blacklist, and is a valid target.
-         * @param proj      - The projectile to check.
-         * @param editorID  - A string var to assign to the editor ID of the given projectile.
-         * @returns bool
-         * \n        true    - Projectile is a valid type, and is not on the blacklist.
-         * \n        false   - Projectile is not a valid target, skip it.
-         */
-        private static bool IsValidPatchTarget(IProjectileGetter proj)
-        {
-            var id = proj.EditorID;
-            if (id != null) { // Editor ID is valid, check if projectile type is valid & projectile isn't present on any blacklist.
-                // Return true if: type is Arrow and is not blacklisted OR if the patch_traps option is enabled, type is missile, editor ID contains "trap", and is not blacklisted
-                return (!Settings.IsBlacklisted(proj) && (proj.Type == Projectile.TypeEnum.Arrow)) || (Settings.MiscTweaks.PatchTraps && (proj.Type == Projectile.TypeEnum.Missile) && id.Contains("Trap", StringComparison.OrdinalIgnoreCase));
-            }
-
-            return false;
+            Console.WriteLine("--- PATCHER COMPLETE ---");
+            Console.WriteLine("Modified " + count + " projectile records.\n");
         }
     }
 }

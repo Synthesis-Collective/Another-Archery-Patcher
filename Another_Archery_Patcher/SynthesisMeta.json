@@ -2,7 +2,7 @@
   "Nickname": "Another Archery Patcher",
   "Visibility": "Visible",
   "OneLineDescription": "Customizable Archery Physics for any load order. No mods required.",
-  "LongDescription": "Archery physics the way you want, for any load order. Allows modifying the speed, gravity, impact force, noise level, and flags of projectiles, as well as removing auto-aim and fixing numerous bugs. (For example: The \"Ninja Dodge\" bug that has existed since launch, arrows colliding with the air in front of you, and more!) Comes with a complete settings menu that allows you to control everything. ( Github: https://github.com/radj307/Another-Archery-Patcher/ ) ( Nexus: https://www.nexusmods.com/skyrimspecialedition/mods/53810 )",
+  "LongDescription": "Comprehensive archery physics overhaul contained in a single patcher.\nAlso fixes a whole host of bugs and inconsistencies not included in any other archery mod such as detection, arrows colliding with the air in front of you, arrows falling out of your bow even at full draw, the \"Ninja Dodge\" bug, and more!\n\nThe default settings are adequate for most users, but if you want to experiment, nearly every setting is exposed through the Synthesis GUI.\nSettings documentation can be found here: https://github.com/Synthesis-Collective/Another-Archery-Patcher/wiki/Settings-Documentation\n\nNexus Page:\t https://www.nexusmods.com/skyrimspecialedition/mods/53810",
   "PreferredAutoVersioning": "Default",
   "RequiredMods": []
 }
