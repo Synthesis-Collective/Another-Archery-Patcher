@@ -30,18 +30,25 @@ namespace Another_Archery_Patcher
             // Handle Projectiles
             var count = 0;
             foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) {
-                if (!Settings.IsValidPatchTarget(proj)) continue;
-                Console.Write("Processing projectile: \"" + proj.EditorID + '\"');
-                var countChanges = 0u;
-                string appliedIdentifier = "[NONE]";
-                try {
-                    (_, countChanges, appliedIdentifier) = Settings.ApplyHighestPriorityStats(state.PatchMod.Projectiles.GetOrAddAsOverride(proj));
-                }
-                finally {
-                    Console.WriteLine(" using category: \"" + appliedIdentifier + '\"');
-                    Console.WriteLine("\tChanged " + countChanges + " values.");
-                    count += countChanges > 0 ? 1 : 0;
-                }
+                if (!Settings.IsValidPatchTarget(proj))
+					continue;
+                Console.WriteLine("Processing \"" + proj.EditorID + '\"');
+                
+				var projectile = proj.DeepCopy(); // copy proj to temp projectile
+
+				if ( projectile == null )
+					continue;
+
+				var modifiedValueCount = 0u;
+				string selectedCategoryIdentifier;
+				// modify temp projectile
+				(projectile, modifiedValueCount, selectedCategoryIdentifier) = Settings.ApplyHighestPriorityStats(projectile);
+
+                if (modifiedValueCount > 0) {
+					state.PatchMod.Projectiles.Set( projectile ); // set proj to temp projectile
+					Console.WriteLine( "\tModified " + modifiedValueCount + " values from category \"" + selectedCategoryIdentifier + "\"\n");
+					++count;
+				}
             }
             Console.WriteLine("--- PATCHER COMPLETE ---");
             Console.WriteLine("Modified " + count + " projectile records.\n");
