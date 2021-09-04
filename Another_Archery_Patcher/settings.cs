@@ -58,7 +58,9 @@ namespace Another_Archery_Patcher
         {
             var stats = GetHighestPriorityStats(proj);
             var countChanges = 0u;
-            var identifier = stats!.Identifier;
+			if ( stats == null )
+				return (proj, countChanges, "[NULL]");
+			var identifier = stats!.Identifier;
             // Speed
             proj.Speed = stats.GetSpeed(proj.Speed, out var changed);
             countChanges += changed ? 1u : 0u;
