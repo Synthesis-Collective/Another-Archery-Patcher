@@ -9,21 +9,19 @@ namespace Another_Archery_Patcher.ConfigHelpers
     [ObjectNameMember(nameof(Flag))]
     public class FlagTweak
     {
-        public FlagTweak(Flag.Type flag, Flag.State state)
+        public FlagTweak(RecordEdit.Editor.Flag.Type flag, RecordEdit.Editor.Flag.State state)
         {
             Flag = flag;
             State = state;
         }
-        
-        public Flag.Type Flag;
-        public Flag.State State;
-        
-        public void Deconstruct(out Flag.Type flag, out Flag.State state)
+
+        public RecordEdit.Editor.Flag.Type Flag;
+        public RecordEdit.Editor.Flag.State State;
+
+        public void Deconstruct(out RecordEdit.Editor.Flag.Type flag, out RecordEdit.Editor.Flag.State state)
         {
             flag = Flag;
             state = State;
         }
-        
-        public void Add(Flag.State state) { }
     }
 }

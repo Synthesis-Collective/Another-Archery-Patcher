@@ -1,13 +1,14 @@
-using System;
-using System.Collections.Generic;
+using Another_Archery_Patcher.ConfigHelpers.RecordEdit;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
+using System;
+using System.Collections.Generic;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
+    using static Editor.Flag.State;
+    using static Editor.Flag.Type;
     using static SoundLevel;
-    using static Flag.Type;
-    using static Flag.State;
     public class StatsPreset
     {
         [MaintainOrder]
@@ -22,62 +23,62 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 Silent
             ),
             new Stats("Arrows",
-                1, 
-                5000.0f, 
-                0.34f, 
-                0.44f, 
+                1,
+                5000.0f,
+                0.34f,
+                0.44f,
                 Silent,
-                new List<string>{ "Arrow" }
+                new List<string> { "Arrow" }
             ),
-            new Stats("Bloodcursed Arrows", 
-                2, 
-                5000.0f, 
-                0f, 
-                0.44f, 
+            new Stats("Bloodcursed Arrows",
+                2,
+                5000.0f,
+                0f,
+                0.44f,
                 Silent,
                 new List<string> { "DCL1ArrowElvenBloodProjectile", "DLC1AurielsBloodDippedProjectile" }
             ),
             new Stats("Bolts",
-                1, 
-                5900.0f, 
-                0.34f, 
-                0.64f, 
-                Normal, 
-                new List<string>{ "Bolt" }
+                1,
+                5900.0f,
+                0.34f,
+                0.64f,
+                Normal,
+                new List<string> { "Bolt" }
             ),
             new Stats("Explosive Bolts",
                 1,
-                5900.0f, 
-                0.34f, 
-                2f, 
-                Loud, 
-                new List<string>{ "Bolt" }
+                5900.0f,
+                0.34f,
+                2f,
+                Loud,
+                new List<string> { "Bolt" }
             ),
             new Stats("Spears",
-                1, 
-                2800.0f, 
-                0.13f, 
-                1.1f, 
-                Silent, 
-                new List<string>{ "Riekling", "SSM", "Throw" }
+                1,
+                2800.0f,
+                0.13f,
+                1.1f,
+                Silent,
+                new List<string> { "Riekling", "SSM", "Throw" }
             ),
             new Stats("Dart Traps",
-                2, 
+                2,
                 2000.0f,
                 0.07f,
-                0.2f, 
-                Normal, 
-                new List<string>{ "TrapDart" },
-                new List<FlagTweak>(){ new (DisableCombatAimCorrection, Remove) }
+                0.2f,
+                Normal,
+                new List<string> { "TrapDart" },
+                new List<FlagTweak>() { new(DisableCombatAimCorrection, Remove) }
             ),
             new Stats("Ballista Traps",
-                3, 
-                6200.0f, 
-                0.69f, 
-                75.0f, 
-                VeryLoud, 
-                new List<string>{ "TrapDweBallista" },
-                new List<FlagTweak>(){ new (DisableCombatAimCorrection, Remove) }
+                3,
+                6200.0f,
+                0.69f,
+                75.0f,
+                VeryLoud,
+                new List<string> { "TrapDweBallista" },
+                new List<FlagTweak>() { new(DisableCombatAimCorrection, Remove) }
             )
         };
 

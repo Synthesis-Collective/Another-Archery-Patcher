@@ -1,12 +1,12 @@
-using System;
-using System.Threading.Tasks;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Synthesis;
+using System;
+using System.Threading.Tasks;
 
 namespace Another_Archery_Patcher
 {
-    public class Program
+    public static class Program
     {
         private static Lazy<Settings> _lazySettings = null!;
         private static Settings Settings => _lazySettings.Value; // convenience wrapper
@@ -29,29 +29,31 @@ namespace Another_Archery_Patcher
 
             // Handle Projectiles
             var count = 0;
-            foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides()) {
+            foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides())
+            {
                 if (!Settings.IsValidPatchTarget(proj))
-					continue;
-                Console.WriteLine("Processing \"" + proj.EditorID + '\"');
-                
-				var projectile = proj.DeepCopy(); // copy proj to temp projectile
+                    continue;
+                Console.WriteLine($"Processing \"{proj.EditorID}\"");
 
-				if ( projectile == null )
-					continue;
+                var projectile = proj.DeepCopy(); // copy proj to temp projectile
 
-				var modifiedValueCount = 0u;
-				string selectedCategoryIdentifier;
-				// modify temp projectile
-				(projectile, modifiedValueCount, selectedCategoryIdentifier) = Settings.ApplyHighestPriorityStats(projectile);
+                if (projectile == null)
+                    continue;
 
-                if (modifiedValueCount > 0) {
-					state.PatchMod.Projectiles.Set( projectile ); // set proj to temp projectile
-					Console.WriteLine( "\tModified " + modifiedValueCount + " values from category \"" + selectedCategoryIdentifier + "\"\n");
-					++count;
-				}
+                var modifiedValueCount = 0u;
+                string selectedCategoryIdentifier;
+                // modify temp projectile
+                (projectile, modifiedValueCount, selectedCategoryIdentifier) = Settings.ApplyHighestPriorityStats(projectile);
+
+                if (modifiedValueCount > 0)
+                {
+                    state.PatchMod.Projectiles.Set(projectile); // set proj to temp projectile
+                    Console.WriteLine($"\tModified {modifiedValueCount} values from category \"{selectedCategoryIdentifier}\"\n");
+                    ++count;
+                }
             }
             Console.WriteLine("--- PATCHER COMPLETE ---");
-            Console.WriteLine("Modified " + count + " projectile records.\n");
+            Console.WriteLine($"Modified {count} projectile records.\n");
         }
     }
 }

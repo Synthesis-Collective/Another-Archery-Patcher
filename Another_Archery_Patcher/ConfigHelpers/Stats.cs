@@ -1,7 +1,7 @@
+using Mutagen.Bethesda.WPF.Reflection.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mutagen.Bethesda.WPF.Reflection.Attributes;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
@@ -19,7 +19,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
             Flags = flags ?? new List<FlagTweak>();
             MatchList = matchlist ?? new List<string>();
         }
-        
+
         [MaintainOrder]
         [Tooltip("The name used to identify this category. Not used by the patcher.")]
         public string Identifier;
@@ -35,7 +35,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
         public List<FlagTweak> Flags;
         [Tooltip("List of words that must appear in a projectile's EditorID to be considered applicable. Leave empty to match all.")]
         public List<string> MatchList;
-        
+
         private static T ResolveValue<T>(T settingVal, T currentVal, out bool modified)
         {
             modified = !settingVal!.Equals(currentVal); // check if values are equal
@@ -51,17 +51,17 @@ namespace Another_Archery_Patcher.ConfigHelpers
         {
             return ResolveValue(Gravity, current, out modified);
         }
-        
+
         public float GetImpactForce(float current, out bool modified)
         {
             return ResolveValue(ImpactForce, current, out modified);
         }
-        
+
         public uint GetSoundLevel(uint current, out bool modified)
         {
             return ResolveValue((uint)SoundLevel, current, out modified);
         }
-        
+
         /**
          * @brief Checks if a given id contains any string in the MatchList, or if the list is empty.
          * @param id        - The Editor ID of the record to check.

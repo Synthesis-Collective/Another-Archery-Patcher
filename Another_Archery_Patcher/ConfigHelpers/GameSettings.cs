@@ -18,7 +18,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
             FullDrawArrowSpeedMult = fullDrawArrowSpeedMult;
             ArrowRecoveryChance = arrowRecoveryChance > 100 ? 100 : arrowRecoveryChance > 0 ? arrowRecoveryChance : 0;
         }
-        
+
         [MaintainOrder]
         [SettingName("Disable Auto-Aim"), Tooltip("Removes the terrible vanilla auto-aim from 1st and 3rd person.")]
         public bool DisableAutoaim; ///< @brief Toggles disabling auto-aim.
@@ -33,7 +33,8 @@ namespace Another_Archery_Patcher.ConfigHelpers
 
         public void AddGameSettingsToPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
-            if (DisableAutoaim) {
+            if (DisableAutoaim)
+            {
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDegrees", Data = 0.0f });          // Add new game setting to patch: "fAutoAimMaxDegrees"
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDistance", Data = 0.0f });         // Add new game setting to patch: "fAutoAimMaxDistance"
                 state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimScreenPercentage", Data = 0.0f });    // Add new game setting to patch: "fAutoAimScreenPercentage"
