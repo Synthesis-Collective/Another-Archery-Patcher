@@ -1,6 +1,4 @@
-# Another-Archery-Patcher Synthesis Patcher
-Customizable archery physics for any load order.
+# Another Archery Patcher
+Fully customizable archery physics overhaul using the [Synthesis Patcher Pipeline](https://github.com/Mutagen-Modding/Synthesis).
 
-Check out the **wiki** tab for documentation.
-
-Nexus Page: *https://www.nexusmods.com/skyrimspecialedition/mods/41018*
+Check out the **[wiki](https://github.com/Synthesis-Collective/Another-Archery-Patcher/wiki)** tab for installation instructions & documentation.
