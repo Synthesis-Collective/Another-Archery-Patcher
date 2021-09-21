@@ -27,15 +27,15 @@ namespace Another_Archery_Patcher.ConfigHelpers
         }
 
         [SettingName("Add Damage to Current")]
-        [Tooltip("When Damage == 0 and this is checked, no changes are made.")]
+        [Tooltip("If unchecked, damage values are overwritten. When Damage == 0 and this is checked, no changes are made.")]
         public bool DamageIsModifier;
         public float Damage;
         [SettingName("Add Value to Current")]
-        [Tooltip("When Value == 0 and this is checked, no changes are made.")]
+        [Tooltip("If unchecked, gold values are overwritten. When Value == 0 and this is checked, no changes are made.")]
         public bool ValueIsModifier;
         public uint Value;
         [SettingName("Add Weight to Current")]
-        [Tooltip("When Weight == 0 and this is checked, no changes are made.")]
+        [Tooltip("If unchecked, weight values are overwritten. When Weight == 0 and this is checked, no changes are made.")]
         public bool WeightIsModifier;
         public float Weight;
 
