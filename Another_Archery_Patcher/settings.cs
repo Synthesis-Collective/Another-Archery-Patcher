@@ -13,7 +13,7 @@ namespace Another_Archery_Patcher
     using static Editor.Flag.State;
     using static Editor.Flag.Type;
 
-    public class Settings : StatsPreset
+    public class Settings : StatsPresets
     {
         [MaintainOrder]
         [SettingName("Global Flag Tweaks")] // FLAG TWEAKS

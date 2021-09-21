@@ -71,7 +71,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
          */
         private bool HasMatch(string id)
         {
-            return !MatchList.Any() || MatchList.Any(match => id.Contains(match, StringComparison.OrdinalIgnoreCase));
+            return MatchList.Count == 0 || MatchList.Any(match => id.Contains(match, StringComparison.OrdinalIgnoreCase));
         }
 
         /**

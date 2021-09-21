@@ -9,7 +9,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
     using static Editor.Flag.State;
     using static Editor.Flag.Type;
     using static SoundLevel;
-    public class StatsPreset
+    public class StatsPresets
     {
         [MaintainOrder]
         [SettingName("Projectile Categories"), Tooltip("Change Projectile Stats Per-Category.")]
@@ -81,6 +81,14 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 new List<FlagTweak>() { new(DisableCombatAimCorrection, Remove) }
             )
         };
+
+        [SettingName("Arrow Ammo Tweaks")]
+        [Tooltip("These are global changes made to all Arrow ammunition records.")]
+        public AmmoStats AmmoTweaksArrow = new();
+
+        [SettingName("Bolt Ammo Tweaks")]
+        [Tooltip("These are global changes made to all Bolt ammunition records.")]
+        public AmmoStats AmmoTweaksBolt = new();
 
         protected Stats? GetHighestPriorityStats(Projectile proj) // Retrieve the highest-priority applicable category.
         {

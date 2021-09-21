@@ -14,7 +14,7 @@ namespace Another_Archery_Patcher.ConfigHelpers.RecordEdit
             }
 
             [System.Flags]
-            public enum Type // needed for settings to show up
+            public enum Type // needed for settings to show up. Don't include 0 none value as users shouldn't be able to select it.
             {
                 Hitscan = 1,
                 Explosion = 2,
