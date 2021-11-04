@@ -19,8 +19,7 @@ namespace Another_Archery_Patcher
         [SettingName("Global Flag Tweaks")] // FLAG TWEAKS
         public List<FlagTweak> GlobalFlagTweaks = new()
         {
-            new FlagTweak(Supersonic, Remove),
-            new FlagTweak(DisableCombatAimCorrection, Add)
+            new FlagTweak(Supersonic, Remove)
         };
 
         [SettingName("Game Settings"), Tooltip("Change the value of archery-related game settings.")] // GAME SETTINGS
