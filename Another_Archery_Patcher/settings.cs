@@ -23,7 +23,14 @@ namespace Another_Archery_Patcher
         };
 
         [SettingName("Game Settings"), Tooltip("Change the value of archery-related game settings.")] // GAME SETTINGS
-        public GameSettings GameSettings = new(true, true, 8, 1F, 33);
+        public GameSettings GameSettings = new(
+            true,
+            true,
+            null,
+            1f,
+            null,
+            null
+            );
 
         [Tooltip("Any projectiles listed here will not be added or modified.")] // BLACKLIST
         public List<FormLinkGetter<IProjectileGetter>> Blacklist = new()
