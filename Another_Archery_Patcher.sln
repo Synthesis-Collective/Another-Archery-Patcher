@@ -4,6 +4,8 @@ VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Another_Archery_Patcher", "Another_Archery_Patcher\Another_Archery_Patcher.csproj", "{C293DDEC-7E96-47F7-AD50-E87463439EDF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E23B9991-A730-4E42-83DA-F9E8F024B53E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

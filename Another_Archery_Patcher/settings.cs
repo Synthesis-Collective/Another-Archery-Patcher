@@ -4,9 +4,6 @@ using Mutagen.Bethesda.FormKeys.SkyrimSE;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Another_Archery_Patcher
 {
