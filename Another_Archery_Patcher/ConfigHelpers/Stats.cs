@@ -8,7 +8,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
     [ObjectNameMember(nameof(Identifier))]
     public class Stats
     {
-        public Stats(string identifier, int priority, float speed, float gravity, float impactforce, SoundLevel soundlevel, List<string>? matchlist = null, List<FlagTweak>? flags = null)
+        public Stats(string identifier, int priority, float speed, float gravity, float impactforce, SoundLevel soundlevel, List<string>? matchlist = null, FlagTweakList? flags = null)
         {
             Identifier = identifier;
             Priority = priority;
@@ -16,7 +16,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
             Gravity = gravity;
             ImpactForce = impactforce;
             SoundLevel = soundlevel;
-            Flags = flags ?? new List<FlagTweak>();
+            Flags = flags ?? new();
             MatchList = matchlist ?? new List<string>();
         }
 
@@ -27,12 +27,12 @@ namespace Another_Archery_Patcher.ConfigHelpers
         public int Priority;
         public float Speed;
         public float Gravity;
-        [SettingName("Impact Force"), Tooltip("How much force is imparted into objects struck by the projectile.")]
+        [Tooltip("How much force is imparted into objects struck by the projectile.")]
         public float ImpactForce;
-        [SettingName("Sound Level"), Tooltip("How much detectable noise a projectile makes while in-flight.")]
+        [Tooltip("How much detectable noise a projectile makes while in-flight.")]
         public SoundLevel SoundLevel;
-        [SettingName("Flags"), Tooltip("Add or remove flags from this category only.")]
-        public List<FlagTweak> Flags;
+        [Tooltip("Add or remove flags from this category only.")]
+        public FlagTweakList Flags;
         [Tooltip("List of words that must appear in a projectile's EditorID to be considered applicable. Leave empty to match all.")]
         public List<string> MatchList;
 
