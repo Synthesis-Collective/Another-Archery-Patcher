@@ -40,8 +40,9 @@ namespace Another_Archery_Patcher
                         continue; // skip if ammo has invalid editor ID or if ammo has NonPlayable flag.
 
                     var ammoCopy = ammo.DeepCopy();
-                    var changes = 0;
-                    if ((ammo.Flags & Ammunition.Flag.NonBolt) == 0) // arrows
+
+                    int changes = 0;
+                    if ((ammo.Flags & Ammunition.Flag.NonBolt) != 0) // arrows
                     {
                         (ammoCopy, changes) = Settings.AmmoTweaksArrow.ApplySettingsTo(ammoCopy);
                         if (changes == 0)
