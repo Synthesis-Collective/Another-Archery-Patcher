@@ -37,8 +37,10 @@ jobs:
     - name:   Stage Files
       run:    |
               foreach($file in $((dir "publish" -recurse | where {$_.extension -in ".exe"}).Fullname)){ mv "$file" "STAGING" }
-              cp '${{ github.workspace }}/Another_Archery_Patcher/Properties/Resources/Another_Archery_Patcher.synth' 'STAGING'
-
+              cp '${{ env.PROJECT_NAME }}/Properties/Resources/Another_Archery_Patcher.synth' 'STAGING'
+      shell:  |
+              pwsh -noninteractive -command "try {{ $ErrorActionPreference='Stop'; . '{0}' }} catch {{ Write-Error ""FAILED: $_""; throw; }} if ((Test-Path -LiteralPath variable:\LASTEXITCODE)) {{ exit $LASTEXITCODE }}"
+              
     - name:   Upload Artifacts
       uses:   actions/upload-artifact@v2
       with:
