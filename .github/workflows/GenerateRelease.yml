@@ -1,0 +1,73 @@
+# This is a heavily modified version of my GenerateRelease.yml script for C++, written for building windows-only C# applications using .NET
+name: Generate Release
+
+on:
+  push:
+    tags: [ '*.*.*' ]
+    
+# Configuration Type
+env:
+  BUILD_TYPE: 'Release'
+  PROJECT_NAME: 'Another_Archery_Patcher'
+
+jobs:
+  build-release:
+    runs-on:  windows-2022
+    env:
+      DOTNET_NOLOGO:                true
+      DOTNET_CLI_TELEMETRY_OPTOUT:  true
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref:          'main'
+        
+    # Setup dependencies
+    - uses: actions/setup-dotnet@main
+      with:
+        dotnet-version: 5.0.x
+
+    - name:   Change Directory
+      run:    cd "${{github.workspace}}"
+
+    - name:   'Publish Binaries to Directory'
+      run:    dotnet publish ${{env.PROJECT_NAME}} -c ${{env.BUILD_TYPE}} /p:PublishProfile="${{env.PROJECT_NAME}}/Properties/PublishProfiles/FolderProfile.pubxml"
+
+    - name:   'Create Staging Directory'
+      run:    mkdir "STAGING"
+
+    - name:   Stage Files
+      run:    |
+              foreach($file in $((dir "publish" -recurse | where {$_.extension -in ".exe"}).Fullname)){ mv "$file" "STAGING" }
+              cp '${{ github.workspace }}/Another_Archery_Patcher/Properties/Resources/Another_Archery_Patcher.synth' 'STAGING'
+
+    - name:   Upload Artifacts
+      uses:   actions/upload-artifact@v2
+      with:
+        name: build
+        path: '${{github.workspace}}/STAGING/*'
+        if-no-files-found: error
+        
+
+  # Create the release using the uploaded artifact on github:
+  create-release:
+    needs:    build-release
+    runs-on:  ubuntu-latest
+
+    steps:
+    - name: Download Artifacts
+      uses: actions/download-artifact@v2
+      with:
+        path:  ${{github.workspace}}
+
+    - run:  ls -lAghR
+
+    - name: 'Create Release'
+      uses: softprops/action-gh-release@v1
+      with:
+        draft:                    true
+        fail_on_unmatched_files:  true
+        generate_release_notes:   true
+        files:      |
+                    ${{github.workspace}}/build/${{env.PROJECT_NAME}}.exe
+                    ${{github.workspace}}/build/${{env.PROJECT_NAME}}.synth
