@@ -37,7 +37,7 @@ jobs:
     - name:   Stage Files
       run:    |
               foreach($file in $((dir "publish" -recurse | where {$_.extension -in ".exe"}).Fullname)){ mv "$file" "STAGING" }
-              cp '${{ env.PROJECT_NAME }}/Properties/Resources/Another_Archery_Patcher.synth' 'STAGING'
+              cp '${{ env.PROJECT_NAME }}/Properties/Resources/Another-Archery-Patcher.synth' 'STAGING'
       shell:  |
               pwsh -noninteractive -command "try {{ $ErrorActionPreference='Stop'; . '{0}' }} catch {{ Write-Error ""FAILED: $_""; throw; }} if ((Test-Path -LiteralPath variable:\LASTEXITCODE)) {{ exit $LASTEXITCODE }}"
               
@@ -70,4 +70,4 @@ jobs:
         generate_release_notes:   true
         files:      |
                     ${{github.workspace}}/build/${{env.PROJECT_NAME}}.exe
-                    ${{github.workspace}}/build/${{env.PROJECT_NAME}}.synth
+                    ${{github.workspace}}/build/Another-Archery-Patcher.synth
