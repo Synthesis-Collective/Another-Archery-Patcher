@@ -22,16 +22,16 @@ namespace Another_Archery_Patcher.ConfigHelpers
 
         [MaintainOrder]
         [SettingName("Disable Auto-Aim")]
-        [Tooltip("Removes the terrible vanilla auto-aim from 1st and 3rd person.")]
+        [Tooltip("Disables the built-in auto-aim from 1st & 3rd person.")]
         public bool DisableAutoaim; ///< @brief Toggles disabling auto-aim.
         [SettingName("Fix Ninja-Dodge")]
-        [Tooltip("Prevents NPCs from dodging your arrows at range.")]
+        [Tooltip("Prevents a bug where NPCs teleport out of the way when they are about to be shot at a distance, even when they haven't detected you.")]
         public bool DisableNpcDodge; ///< @brief Toggles disabling NPC dodge to fix npc ninja dodge.
         [SettingName("Max Attached Arrows")]
         [Tooltip("Max number of projectiles stuck into an actor before some start disappearing. (Min: 0, Default: 3)")]
         public int MaxAttachedArrows;
         [SettingName("Fully Drawn Speed Mult")]
-        [Tooltip("This is the multiplier applied to arrows shot from a fully drawn bow. (Default: 1.0)")]
+        [Tooltip("This is the speed multiplier applied to arrows shot from a fully drawn bow. (Default: 1.0)")]
         public float FullDrawArrowSpeedMult;
         [SettingName("Recovery Chance")]
         [Tooltip("Chance that a projectile will be in an actors inventory after they are hit by it. (Min: 0, Default: 33, Max: 100)")]
