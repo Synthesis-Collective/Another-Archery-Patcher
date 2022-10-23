@@ -12,7 +12,8 @@ namespace Another_Archery_Patcher.ConfigHelpers
     public class StatsPresets
     {
         [MaintainOrder]
-        [SettingName("Projectile Categories"), Tooltip("Change Projectile Stats Per-Category.")]
+        [SettingName("Projectile Categories")]
+        [Tooltip("Change Projectile Stats Per-Category.")]
         public List<Stats> ProjectileCategories = new()
         {
             new Stats("Default",

@@ -22,7 +22,8 @@ namespace Another_Archery_Patcher
             new FlagTweak(Supersonic, Remove)
         };
 
-        [SettingName("Game Settings"), Tooltip("Change the value of archery-related game settings.")] // GAME SETTINGS
+        [SettingName("Game Settings")]
+        [Tooltip("Change the value of archery-related game settings.")] // GAME SETTINGS
         public GameSettings GameSettings = new(true, true, 8, 1F, 33, 12288);
 
         [Tooltip("Any projectiles listed here will not be added or modified.")] // BLACKLIST
