@@ -30,9 +30,9 @@ namespace Another_Archery_Patcher
             // Handle Game Settings
             Settings.GameSettings.AddGameSettingsToPatch(state);
 
-            // Handle Projectiles
             var count = 0;
 
+            // Handle Ammunition
             if (!Settings.AmmoTweaksArrow.ShouldSkip() || !Settings.AmmoTweaksBolt.ShouldSkip())
             {
                 Console.WriteLine("Checking Ammunition Records...");
@@ -62,6 +62,9 @@ namespace Another_Archery_Patcher
                     ++count;
                 }
             }
+            else Console.WriteLine("Skipping Ammunition Records... (Nothing to do)");
+
+            // Handle Projectiles
             Console.WriteLine("Checking Projectile Records...");
             foreach (var proj in state.LoadOrder.PriorityOrder.Projectile().WinningOverrides())
             {

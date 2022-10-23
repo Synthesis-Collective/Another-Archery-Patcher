@@ -1,6 +1,9 @@
+using Mutagen.Bethesda;
+using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Synthesis;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
+using System;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
@@ -41,25 +44,96 @@ namespace Another_Archery_Patcher.ConfigHelpers
         public float CollisionMaxDistFromPlayer;
 
 
+        private bool AddToPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state, string editorID, object data)
+        {
+            if (state.LinkCache.TryResolveIdentifier<IGameSettingGetter>(editorID, out FormKey formKey) && state.LinkCache.TryResolve<IGameSettingGetter>(formKey, out IGameSettingGetter? gameSettingGetter))
+            { // RECORD ALREADY EXISTS:
+                var gameSettingCopy = gameSettingGetter.DeepCopy();
+
+                if (gameSettingCopy is GameSettingFloat floatGameSetting)
+                {
+                    var val = Convert.ToSingle(data);
+                    if (val.Equals(floatGameSetting.Data))
+                        return false;
+
+                    floatGameSetting.Data = val;
+                }
+                else if (gameSettingCopy is GameSettingInt intGameSetting)
+                {
+                    var val = Convert.ToInt32(data);
+                    if (val.Equals(intGameSetting.Data))
+                        return false;
+
+                    intGameSetting.Data = val;
+                }
+                else if (gameSettingCopy is GameSettingString strGameSetting)
+                {
+                    var val = Convert.ToString(data);
+                    if (val is null || val.Equals(strGameSetting.Data))
+                        return false;
+
+                    strGameSetting.Data = val;
+                }
+                else if (gameSettingCopy is GameSettingBool boolGameSetting)
+                {
+                    var val = Convert.ToBoolean(data);
+                    if (val.Equals(boolGameSetting.Data))
+                        return false;
+
+                    boolGameSetting.Data = val;
+                }
+                else throw new InvalidOperationException($"The type '{data.GetType().FullName}' is invalid for parameter '{nameof(data)}' in function '{nameof(AddToPatch)}'; expected 'float', 'int', 'string', or 'bool'!");
+
+                state.PatchMod.GameSettings.Set(gameSettingCopy);
+                return true;
+            }
+            else
+            { // RECORD DOES NOT EXIST:
+                GameSetting? gameSetting = null;
+
+                if (data is float floatVal)
+                {
+                    gameSetting = new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = editorID, Data = floatVal };
+                }
+                else if (data is int intVal)
+                {
+                    gameSetting = new GameSettingInt(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = editorID, Data = intVal };
+                }
+                else if (data is string || data is null)
+                {
+                    gameSetting = new GameSettingString(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = editorID, Data = (string?)data };
+                }
+                else if (data is bool boolVal)
+                {
+                    gameSetting = new GameSettingBool(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = editorID, Data = boolVal };
+                }
+                else throw new InvalidOperationException($"The type '{data.GetType().FullName}' is invalid for parameter '{nameof(data)}' in function '{nameof(AddToPatch)}'; expected 'float', 'int', 'string', or 'bool'!");
+
+                state.PatchMod.GameSettings.Set(gameSetting);
+                return true;
+            }
+        }
         public void AddGameSettingsToPatch(IPatcherState<ISkyrimMod, ISkyrimModGetter> state)
         {
             if (DisableAutoaim)
             {
-                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDegrees", Data = 0.0f });          // Add new game setting to patch: "fAutoAimMaxDegrees"
-                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDistance", Data = 0.0f });         // Add new game setting to patch: "fAutoAimMaxDistance"
-                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimScreenPercentage", Data = 0.0f });    // Add new game setting to patch: "fAutoAimScreenPercentage"
-                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fAutoAimMaxDegrees3rdPerson", Data = 0.0f }); // Add new game setting to patch: "fAutoAimMaxDegrees3rdPerson"
+                AddToPatch(state, "fAutoAimMaxDegrees", 0.0f);
+                AddToPatch(state, "fAutoAimMaxDistance", 0.0f);
+                AddToPatch(state, "fAutoAimScreenPercentage", 0.0f);
+                AddToPatch(state, "fAutoAimMaxDegrees3rdPerson", 0.0f);
             }
             if (DisableNpcDodge)
-                state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fCombatDodgeChanceMax", Data = 0.0f });       // Add new game setting to patch: "fCombatDodgeChanceMax"
+            {
+                AddToPatch(state, "fCombatDodgeChanceMax", 0.0f);
+            }
             // max attached arrows
-            state.PatchMod.GameSettings.Add(new GameSettingInt(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "iMaxAttachedArrows", Data = MaxAttachedArrows });
+            AddToPatch(state, "iMaxAttachedArrows", MaxAttachedArrows);
             // fully drawn arrow speed mult
-            state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fArrowSpeedMult", Data = FullDrawArrowSpeedMult });
+            AddToPatch(state, "fArrowSpeedMult", FullDrawArrowSpeedMult);
             // arrow recovery chance
-            state.PatchMod.GameSettings.Add(new GameSettingInt(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "iArrowInventoryChance", Data = ArrowRecoveryChance });
+            AddToPatch(state, "iArrowInventoryChance", ArrowRecoveryChance);
             // fVisibleNavmeshMoveDist
-            state.PatchMod.GameSettings.Add(new GameSettingFloat(state.PatchMod.GetNextFormKey(), state.PatchMod.SkyrimRelease) { EditorID = "fVisibleNavmeshMoveDist", Data = CollisionMaxDistFromPlayer });
+            AddToPatch(state, "fVisibleNavmeshMoveDist", CollisionMaxDistFromPlayer);
         }
     }
 }
