@@ -9,16 +9,13 @@ using System.Linq;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
-    using static Editor.Flag.State;
-    using static Editor.Flag.Type;
-
     public class Settings : StatsPresets
     {
         [MaintainOrder]
         [SettingName("Global Flag Tweaks")] // FLAG TWEAKS
-        public List<FlagTweak> GlobalFlagTweaks = new()
+        public EnumFlagSetting<Editor.Flag.Type> GlobalFlagTweaks = new()
         {
-            new FlagTweak(Supersonic, Remove)
+            FlagChanges = new() { new(EnumFlagOperationType.Disable, Editor.Flag.Type.Supersonic) }
         };
 
         [SettingName("Game Settings")]
@@ -79,11 +76,10 @@ namespace Another_Archery_Patcher.ConfigHelpers
             proj.SoundLevel = stats.GetSoundLevel(proj.SoundLevel, out changed);
             countChanges += changed ? 1u : 0u;
             // Flags
-            uint countFlagChanges;
-            (proj, countFlagChanges) = Editor.Flag.ApplyFlags(proj, GlobalFlagTweaks); // apply global flags
-            countChanges += countFlagChanges;
-            (proj, countFlagChanges) = Editor.Flag.ApplyFlags(proj, stats.Flags); // apply specific flags
-            countChanges += countFlagChanges;
+            proj.Flags = (Projectile.Flag)GlobalFlagTweaks.GetValueOrAlternative((Editor.Flag.Type)proj.Flags, out changed);
+            if (changed)
+                countChanges++;
+
             return (proj, countChanges, identifier);
         }
     }

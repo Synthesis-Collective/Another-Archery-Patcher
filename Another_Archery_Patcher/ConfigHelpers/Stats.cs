@@ -1,3 +1,4 @@
+using Another_Archery_Patcher.ConfigHelpers.RecordEditor;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
     [ObjectNameMember(nameof(Identifier))]
     public class Stats
     {
-        public Stats(string identifier, int priority, float speed, float gravity, float impactforce, SoundLevel soundlevel, List<string>? matchlist = null, List<FlagTweak>? flags = null)
+        public Stats(string identifier, int priority, float speed, float gravity, float impactforce, SoundLevel soundlevel, List<string>? matchlist = null, List<EnumFlagOperation<Editor.Flag.Type>>? flags = null)
         {
             Identifier = identifier;
             Priority = priority;
@@ -16,7 +17,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
             Gravity = gravity;
             ImpactForce = impactforce;
             SoundLevel = soundlevel;
-            Flags = flags ?? new List<FlagTweak>();
+            Flags = new() { FlagChanges = flags ?? new() };
             MatchList = matchlist ?? new List<string>();
         }
 
@@ -35,7 +36,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
         public SoundLevel SoundLevel;
         [SettingName("Flags")]
         [Tooltip("Add or remove flags from this category only.")]
-        public List<FlagTweak> Flags;
+        public EnumFlagSetting<Editor.Flag.Type> Flags;
         [Tooltip("List of words that must appear in a projectile's EditorID to be considered applicable. Leave empty to match all.")]
         public List<string> MatchList;
 

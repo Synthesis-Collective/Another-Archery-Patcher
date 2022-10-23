@@ -1,9 +1,9 @@
-using System;
-using System.Threading.Tasks;
 using Another_Archery_Patcher.ConfigHelpers;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Synthesis;
+using System;
+using System.Threading.Tasks;
 
 namespace Another_Archery_Patcher
 {

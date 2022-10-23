@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 namespace Another_Archery_Patcher.ConfigHelpers
 {
-    using static Editor.Flag.State;
-    using static Editor.Flag.Type;
     using static SoundLevel;
     public class StatsPresets
     {
@@ -70,7 +68,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 0.2f,
                 Normal,
                 new List<string> { "TrapDart" },
-                new List<FlagTweak>() { new(DisableCombatAimCorrection, Remove) }
+                new List<EnumFlagOperation<Editor.Flag.Type>>() { new(EnumFlagOperationType.Disable, Editor.Flag.Type.DisableCombatAimCorrection) }
             ),
             new Stats("Ballista Traps",
                 3,
@@ -79,7 +77,7 @@ namespace Another_Archery_Patcher.ConfigHelpers
                 75.0f,
                 VeryLoud,
                 new List<string> { "TrapDweBallista" },
-                new List<FlagTweak>() { new(DisableCombatAimCorrection, Remove) }
+                new List<EnumFlagOperation<Editor.Flag.Type>>() { new(EnumFlagOperationType.Disable, Editor.Flag.Type.DisableCombatAimCorrection) }
             )
         };
 
