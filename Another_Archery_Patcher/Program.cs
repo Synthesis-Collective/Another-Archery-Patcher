@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Another_Archery_Patcher.ConfigHelpers;
 using Mutagen.Bethesda;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.Synthesis;
@@ -85,7 +86,7 @@ namespace Another_Archery_Patcher
                 if (changes > 0)
                 {
                     state.PatchMod.Projectiles.Set(projectile); // set proj to temp projectile
-                    Console.WriteLine($"\tModified {changes} value{(changes != 1 ? "s" : "")} from category \"{selectedCategoryIdentifier}\"\n");
+                    Console.WriteLine($"\tModified {changes} value{(changes != 1 ? "s" : "")} using values from category \"{selectedCategoryIdentifier}\"\n");
                     ++count;
                 }
             }

@@ -1,5 +1,4 @@
-using Another_Archery_Patcher.ConfigHelpers;
-using Another_Archery_Patcher.ConfigHelpers.RecordEdit;
+using Another_Archery_Patcher.ConfigHelpers.RecordEditor;
 using Mutagen.Bethesda.FormKeys.SkyrimSE;
 using Mutagen.Bethesda.Plugins;
 using Mutagen.Bethesda.Skyrim;
@@ -8,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Another_Archery_Patcher
+namespace Another_Archery_Patcher.ConfigHelpers
 {
     using static Editor.Flag.State;
     using static Editor.Flag.Type;

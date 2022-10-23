@@ -1,4 +1,4 @@
-using Another_Archery_Patcher.ConfigHelpers.RecordEdit;
+using Another_Archery_Patcher.ConfigHelpers.RecordEditor;
 using Mutagen.Bethesda.Skyrim;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
 using System;

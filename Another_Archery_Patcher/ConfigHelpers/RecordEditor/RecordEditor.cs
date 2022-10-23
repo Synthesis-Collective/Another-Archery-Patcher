@@ -1,7 +1,7 @@
 using Mutagen.Bethesda.Skyrim;
 using System.Collections.Generic;
 
-namespace Another_Archery_Patcher.ConfigHelpers.RecordEdit
+namespace Another_Archery_Patcher.ConfigHelpers.RecordEditor
 {
     public readonly partial struct Editor
     {

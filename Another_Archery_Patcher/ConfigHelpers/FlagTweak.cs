@@ -1,3 +1,4 @@
+using Another_Archery_Patcher.ConfigHelpers.RecordEditor;
 using Mutagen.Bethesda.WPF.Reflection.Attributes;
 
 namespace Another_Archery_Patcher.ConfigHelpers
@@ -9,16 +10,16 @@ namespace Another_Archery_Patcher.ConfigHelpers
     [ObjectNameMember(nameof(Flag))]
     public class FlagTweak
     {
-        public FlagTweak(RecordEdit.Editor.Flag.Type flag, RecordEdit.Editor.Flag.State state)
+        public FlagTweak(Editor.Flag.Type flag, Editor.Flag.State state)
         {
             Flag = flag;
             State = state;
         }
 
-        public RecordEdit.Editor.Flag.Type Flag;
-        public RecordEdit.Editor.Flag.State State;
+        public Editor.Flag.Type Flag;
+        public Editor.Flag.State State;
 
-        public void Deconstruct(out RecordEdit.Editor.Flag.Type flag, out RecordEdit.Editor.Flag.State state)
+        public void Deconstruct(out Editor.Flag.Type flag, out Editor.Flag.State state)
         {
             flag = Flag;
             state = State;
